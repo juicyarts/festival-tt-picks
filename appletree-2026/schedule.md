@@ -22,7 +22,6 @@
 | [David Bay](https://open.spotify.com/artist/5yHK7mClF5i8Jabk8IKISo) | 19:00 | Tiefes Holz | ~ | Disco / House / Indie | Warm disco grooves, hypnotic synths, 70s spirit — sounds like an endless summer evening |
 | [EV](https://open.spotify.com/artist/1qOueWotu6CIb1GMoib2GX) | 20:10 | Zirkus Zelt | ~ | UK Rap / Rave / Club | British artist & producer — 90s rave meets UK rap, songs about youth, work & mental health |
 | [Kyong Sono](https://open.spotify.com/artist/4zy5g7xdWMP1adk6zGHeVx) | 21:00 | Tiefes Holz | ~ | House / Electronic | Berlin-based — hypnotic four-to-the-floor rhythms, minimalist yet impossibly layered |
-| [SALÒ](https://open.spotify.com/artist/49uauFOxmzTD83IUpZPdLz) | 22:30 | Zirkus Zelt | + | Pop-Punk / Indie | Vienna's "Anarcho-Pop-Punk-Poet" Andreas Binder — loud, uncomfortable & damn danceable |
 | [Shkoon](https://open.spotify.com/artist/3CdsJ9u53uPu3dScKypLVv) | 01:00 | Wald Bühne | ~ | Arabic Folklore × Electronic | Hamburg duo Ameen & Thorben — a decade of fusing Arabic tradition with electronic music |
 
 ## Saturday (Samstag)
