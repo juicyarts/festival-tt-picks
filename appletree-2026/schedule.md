@@ -15,6 +15,7 @@
 | Artist | Time | Stage | Rating | Genre | Summary |
 |---|---|---|---|---|---|
 | Arne Semsrott & Gilda Sahebi | 13:30 | Zirkus Zelt | + | Political Talk / Podcast | Gilda (journalist, author on polarization & Middle East) & Arne (FragDenStaat editor) — their podcast, live |
+| Stammtischkämpfer\*innen | 11:30–12:30 | Glitzer Salon | ++ | Workshop | Learn to counter right-wing and racist slogans with confidence — solidarity over exclusion |
 | [Prismala](https://open.spotify.com/artist/6lXVNvlFTyg8be1FVdfRDY) | 16:00 | Wald Bühne | + | Neo-Soul / Alternative Rock / Indie Pop | Berlin quartet with English, American-Gambian, Afro-Brazilian & German roots — groovy, sun-dappled Neo-Soul |
 | [Σtella](https://open.spotify.com/intl-de/artist/2tBWWgGv7H5ymPtJrT1rNu) | 18:00 | Wald Bühne | ++ | Greek Indie Pop / Synth-Pop / Retro Soul | Greek singer Stella Chronopoulou — shimmering synth-pop with indie warmth and retro soul swagger |
 | [Rikas](https://open.spotify.com/artist/3OWO2LOPTl1u6XvJHkwHmd) | 19:00 | Große Bühne | ~ | Indie Pop | Swabian Alps → LA → Liguria — third time back, feelgood indie pop road-tested across continents |
