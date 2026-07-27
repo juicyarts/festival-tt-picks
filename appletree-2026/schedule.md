@@ -1,0 +1,52 @@
+# Appletree Garden 2026 — My Picks
+
+## Thursday (Donnerstag)
+
+| Artist | Time | Stage | Rating | Genre | Summary |
+|---|---|---|---|---|---|
+| [Baby Smith](https://open.spotify.com/artist/4QzM5sY3QDA4mmgv8Xj932) | 16:00 | Tiefes Holz | ~ | Psychedelic Pop | Australian duo based in Berlin, met at Kottbusser Tor — sun-drenched, heart-opening psychedelic pop |
+| [Bella Barbe](https://open.spotify.com/artist/0vCuoT3gNNLmYGlZnQSGH6) | 19:30 | Zirkus Zelt | ~ | Soul / Rap | 19-year-old Londoner — soulful melodies meet raw rap bars, deeply personal storytelling |
+| [Sébastien Tellier](https://open.spotify.com/artist/23ymPLjbtAMzTJS2qRtQ8Z) | 21:10 | Große Bühne | ~ | French Synth-Pop / Electronic | French pop icon (Eurovision 2008), synth-heavy dreamscapes floating between heaven and the dancefloor |
+| [World Brain](https://open.spotify.com/artist/2CiVXlqZHnOj4nWFBj3s2k) | 21:20 | Oase | ~ | Indie Electronic | One-man project by Lucas Chantre — digital nostalgia meets organic grooves, Oase at dusk |
+| [Alma Linda](https://open.spotify.com/artist/7m8eGjYW5sFeu4YWABh2d9) | 22:20 | Tiefes Holz | ~ | DJ Set / Global Pop | Berlin-based Chilean — sassy globe-trotting DJ sets full of Amore, already a Tiefes Holz legend |
+
+## Friday (Freitag)
+
+| Artist | Time | Stage | Rating | Genre | Summary |
+|---|---|---|---|---|---|
+| Arne Semsrott & Gilda Sahebi | 13:30 | Zirkus Zelt | + | Political Talk / Podcast | Gilda (journalist, author on polarization & Middle East) & Arne (FragDenStaat editor) — their podcast, live |
+| [Prismala](https://open.spotify.com/artist/6lXVNvlFTyg8be1FVdfRDY) | 16:00 | Wald Bühne | + | Neo-Soul / Alternative Rock / Indie Pop | Berlin quartet with English, American-Gambian, Afro-Brazilian & German roots — groovy, sun-dappled Neo-Soul |
+| [Σtella](https://open.spotify.com/intl-de/artist/2tBWWgGv7H5ymPtJrT1rNu) | 18:00 | Wald Bühne | ++ | Greek Indie Pop / Synth-Pop / Retro Soul | Greek singer Stella Chronopoulou — shimmering synth-pop with indie warmth and retro soul swagger |
+| [Rikas](https://open.spotify.com/artist/3OWO2LOPTl1u6XvJHkwHmd) | 19:00 | Große Bühne | ~ | Indie Pop | Swabian Alps → LA → Liguria — third time back, feelgood indie pop road-tested across continents |
+| [David Bay](https://open.spotify.com/artist/5yHK7mClF5i8Jabk8IKISo) | 19:00 | Tiefes Holz | ~ | Disco / House / Indie | Warm disco grooves, hypnotic synths, 70s spirit — sounds like an endless summer evening |
+| [EV](https://open.spotify.com/artist/1qOueWotu6CIb1GMoib2GX) | 20:10 | Zirkus Zelt | ~ | UK Rap / Rave / Club | British artist & producer — 90s rave meets UK rap, songs about youth, work & mental health |
+| [Kyong Sono](https://open.spotify.com/artist/4zy5g7xdWMP1adk6zGHeVx) | 21:00 | Tiefes Holz | ~ | House / Electronic | Berlin-based — hypnotic four-to-the-floor rhythms, minimalist yet impossibly layered |
+| [SALÒ](https://open.spotify.com/artist/49uauFOxmzTD83IUpZPdLz) | 22:30 | Zirkus Zelt | + | Pop-Punk / Indie | Vienna's "Anarcho-Pop-Punk-Poet" Andreas Binder — loud, uncomfortable & damn danceable |
+| [Shkoon](https://open.spotify.com/artist/3CdsJ9u53uPu3dScKypLVv) | 01:00 | Wald Bühne | ~ | Arabic Folklore × Electronic | Hamburg duo Ameen & Thorben — a decade of fusing Arabic tradition with electronic music |
+
+## Saturday (Samstag)
+
+| Artist | Time | Stage | Rating | Genre | Summary |
+|---|---|---|---|---|---|
+| [GiGi Girls](https://open.spotify.com/artist/2Ye4DtL7eIPpcDnlum0wXR) | 17:00 | Tiefes Holz | ++ | Italo Disco / Dream Pop / Synth | Cologne trio with Italian roots — on a mission to revive Italo-Disco with funky dream pop & shimmering synths |
+| [Nathalie Froehlich](https://open.spotify.com/artist/1L6ZYC0cyOyqdut8EpHyDq) | 19:00 | Tiefes Holz | — | Reggaeton / Baile Funk / Techno / Rap | Swiss rapper from Lausanne's autonomous scene — furious, danceable mix of reggaeton, baile funk & rolling techno |
+| [Dolphin Love](https://open.spotify.com/artist/4uT5ywK30prkNZbf4BlQVh) | 21:00 | Tiefes Holz | ~ | Alternative / Psych / Indie Pop | Euphoric-meets-melancholic soundscapes — warmth, optimism & a welcome return to the forest |
+| [Blond](https://open.spotify.com/artist/4WnfD0e5J91W7zyHBK6svA) | 21:20 | Große Bühne | ~ | Indie Pop / Art Pop | Chemnitz trio Nina, Lotta & Johann — "Bling-Bling-Indie" turned into a full pop spectacle, third pilgrimage |
+| [Daði Freyr](https://open.spotify.com/artist/3Hb64DQZIhDCgyHKrzBXOL) | 01:00 | Wald Bühne | + | Electro-Pop / Funktronica / Synth-Pop | Icelandic Eurovision cult icon (2022) — funky, funny & life-affirming electro-pop, even better live |
+| Late Night Jockel Session & Seebo | 02:00 | Oase | — | Eclectic DJ Set / Disco | Bathrobe on, prosecco in hand — a late-night DJ joyride through decades of fat bass, disco & glorious chaos |
+| [Kataya](https://soundcloud.com/kataya_blossmbae) | 02:50 | Tiefes Holz | ? | Space Disco / House | Back by popular demand after her 2024 Space Disco takeover — sassy grooves, cosmic bounce |
+
+---
+
+## Conflicts ⚠️
+
+| Day | Time | Conflict |
+|---|---|---|
+| FR | 19:00 | **Rikas** (Große Bühne) vs **David Bay** (Tiefes Holz) |
+| DO | 21:10–21:20 | **Sébastien Tellier** (Große Bühne) vs **World Brain** (Oase) — only 10 min overlap |
+| SA | 21:00–21:20 | **Dolphin Love** (Tiefes Holz) vs **Blond** (Große Bühne) — only 20 min overlap |
+
+> **++** don't miss &nbsp;|&nbsp; **+** priority &nbsp;|&nbsp; **~** if schedule allows &nbsp;|&nbsp; **—** / **?** unrated
+>
+> Genres & summaries sourced from artist bios on appletreegarden.de, MusicBrainz, and Wikipedia.
+> Spotify links verified via official artist pages, Wikidata, and the festival website.
