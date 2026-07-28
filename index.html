@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
@@ -9,7 +10,8 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#1a1a2e">
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23fff'/><text y='50' font-size='64' text-anchor='middle' x='50' dominant-baseline='central'>✊</text></svg>">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23fff'/><text y='50' font-size='64' text-anchor='middle' x='50' dominant-baseline='central'>✊</text></svg>">
   <title>Achja?!</title>
   <style>
     :root {
@@ -22,8 +24,9 @@
       --accent-soft: #fce4e8;
       --link: #2d6a9f;
       --stage-bg: #f0ede8;
-      --shadow: 0 1px 3px rgba(0,0,0,.06);
+      --shadow: 0 1px 3px rgba(0, 0, 0, .06);
     }
+
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #1a1a2e;
@@ -35,11 +38,21 @@
         --accent-soft: #3a1a2e;
         --link: #7cb9e8;
         --stage-bg: #2a2a44;
-        --shadow: 0 1px 3px rgba(0,0,0,.3);
+        --shadow: 0 1px 3px rgba(0, 0, 0, .3);
       }
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-text-size-adjust: 100%;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg);
@@ -53,224 +66,521 @@
 
     /* ── header ── */
     header {
-      position: sticky; top: 0; z-index: 10;
+      position: sticky;
+      top: 0;
+      z-index: 10;
       background: var(--bg);
       border-bottom: 1px solid var(--border);
       padding: 10px 16px;
-      display: flex; align-items: center; gap: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
+
     header .back {
-      width: 36px; height: 36px;
-      border: none; background: var(--stage-bg);
-      border-radius: 50%; font-size: 18px;
-      cursor: pointer; color: var(--text);
-      display: none; align-items: center; justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: var(--stage-bg);
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--text);
+      display: none;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
     }
-    header .back.visible { display: flex; }
-    header h1 { font-size: 1rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    header .back.visible {
+      display: flex;
+    }
+
+    header h1 {
+      font-size: 1rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     /* ── main ── */
-    main { padding: 12px 16px 32px; max-width: 720px; margin: 0 auto; overflow-x: hidden; }
+    main {
+      padding: 12px 16px 32px;
+      max-width: 720px;
+      margin: 0 auto;
+      overflow-x: hidden;
+    }
 
     /* ── listing ── */
-    .listing { display: none; }
-    .listing.active { display: block; }
-    .listing h2 { font-size: .85rem; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); margin-bottom: 12px; }
+    .listing {
+      display: none;
+    }
+
+    .listing.active {
+      display: block;
+    }
+
+    .listing h2 {
+      font-size: .85rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
     .card {
-      display: block; padding: 14px 16px;
-      background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: 12px; margin-bottom: 8px;
-      text-decoration: none; color: var(--text);
+      display: block;
+      padding: 14px 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 8px;
+      text-decoration: none;
+      color: var(--text);
       box-shadow: var(--shadow);
       transition: transform .15s;
     }
-    .card:active { transform: scale(.98); }
-    .card .title { font-weight: 600; font-size: .95rem; }
-    .card .meta { font-size: .8rem; color: var(--text-muted); margin-top: 2px; }
+
+    .card:active {
+      transform: scale(.98);
+    }
+
+    .card .title {
+      font-weight: 600;
+      font-size: .95rem;
+    }
+
+    .card .meta {
+      font-size: .8rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
 
     /* ── content view ── */
-    .content { display: none; }
-    .content.active { display: block; }
+    .content {
+      display: none;
+    }
+
+    .content.active {
+      display: block;
+    }
 
     /* ── markdown rendered ── */
-    .md { font-size: .9rem; overflow-x: hidden; }
-    .md h1 { font-size: 1.2rem; margin: 0 0 16px; line-height: 1.3; }
-    .md h2 { font-size: 1rem; margin: 24px 0 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
-    .md h3 { font-size: .9rem; margin: 16px 0 6px; }
-    .md p { margin: 8px 0; }
-    .md a { color: var(--link); text-decoration: none; }
-    .md a:visited { color: var(--link); }
-    .md hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+    .md {
+      font-size: .9rem;
+      overflow-x: hidden;
+    }
+
+    .md h1 {
+      font-size: 1.2rem;
+      margin: 0 0 16px;
+      line-height: 1.3;
+    }
+
+    .md h2 {
+      font-size: 1rem;
+      margin: 24px 0 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .md h3 {
+      font-size: .9rem;
+      margin: 16px 0 6px;
+    }
+
+    .md p {
+      margin: 8px 0;
+    }
+
+    .md a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    .md a:visited {
+      color: var(--link);
+    }
+
+    .md hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 20px 0;
+    }
 
     /* ── mobile-friendly tables ── */
     .md .table-wrap {
-      overflow-x: auto; -webkit-overflow-scrolling: touch;
-      margin: 8px -16px; padding: 0 16px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 8px -16px;
+      padding: 0 16px;
       scroll-snap-type: x mandatory;
     }
+
     .md table {
-      width: 100%; min-width: 420px;
-      border-collapse: collapse; font-size: .8rem;
+      width: 100%;
+      min-width: 420px;
+      border-collapse: collapse;
+      font-size: .8rem;
     }
+
     .md th {
-      text-align: left; font-size: .7rem; text-transform: uppercase;
-      letter-spacing: .04em; color: var(--text-muted);
-      padding: 6px 8px; border-bottom: 2px solid var(--border);
+      text-align: left;
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--text-muted);
+      padding: 6px 8px;
+      border-bottom: 2px solid var(--border);
       white-space: nowrap;
     }
+
     .md td {
-      padding: 8px 8px; border-bottom: 1px solid var(--border);
+      padding: 8px 8px;
+      border-bottom: 1px solid var(--border);
       vertical-align: top;
-      word-break: break-word; overflow-wrap: anywhere;
+      word-break: break-word;
+      overflow-wrap: anywhere;
     }
-    .md a { word-break: break-all; }
-    .md tr:last-child td { border-bottom: none; }
+
+    .md a {
+      word-break: break-all;
+    }
+
+    .md tr:last-child td {
+      border-bottom: none;
+    }
 
     /* card-style rows on narrow screens */
     @media (max-width: 520px) {
-      .md .table-wrap { margin: 8px 0; padding: 0; overflow: hidden; }
-      .md table, .md thead, .md tbody, .md th, .md tr, .md td { display: block; min-width: 0; }
-      .md thead { display: none; }
+      .md .table-wrap {
+        margin: 8px 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      .md table,
+      .md thead,
+      .md tbody,
+      .md th,
+      .md tr,
+      .md td {
+        display: block;
+        min-width: 0;
+      }
+
+      .md thead {
+        display: none;
+      }
+
       .md tr {
-        background: var(--card-bg); border: 1px solid var(--border);
-        border-radius: 10px; margin-bottom: 10px; padding: 10px 14px;
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        margin-bottom: 10px;
+        padding: 10px 14px;
         box-shadow: var(--shadow);
       }
+
       .md td {
-        border: none; padding: 4px 0; display: block; font-size: .82rem;
-        word-break: break-word; overflow-wrap: anywhere; min-width: 0;
+        border: none;
+        padding: 4px 0;
+        display: block;
+        font-size: .82rem;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        min-width: 0;
       }
-      .md td, .md td * { max-width: 100%; }
-      .md a { word-break: break-all; }
-      .md tr { overflow: hidden; }
+
+      .md td,
+      .md td * {
+        max-width: 100%;
+      }
+
+      .md a {
+        word-break: break-all;
+      }
+
+      .md tr {
+        overflow: hidden;
+      }
+
       .md td::before {
         content: attr(data-label);
         display: block;
-        font-size: .64rem; font-weight: 600; text-transform: uppercase;
-        letter-spacing: .03em; color: var(--text-muted);
+        font-size: .64rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .03em;
+        color: var(--text-muted);
         margin-bottom: 1px;
       }
-      .md td[data-label=""]::before { display: none; }
-      .md td:first-child { font-weight: 600; font-size: .92rem; margin-bottom: 6px; }
-      .md td:first-child::before { display: none; }
+
+      .md td[data-label=""]::before {
+        display: none;
+      }
+
+      .md td:first-child {
+        font-weight: 600;
+        font-size: .92rem;
+        margin-bottom: 6px;
+      }
+
+      .md td:first-child::before {
+        display: none;
+      }
 
     }
 
     .md blockquote {
       border-left: 3px solid var(--accent);
-      margin: 12px 0; padding: 8px 14px;
-      background: var(--accent-soft); border-radius: 0 8px 8px 0;
-      font-size: .82rem; color: var(--text-muted);
+      margin: 12px 0;
+      padding: 8px 14px;
+      background: var(--accent-soft);
+      border-radius: 0 8px 8px 0;
+      font-size: .82rem;
+      color: var(--text-muted);
     }
+
     .md code {
-      background: var(--stage-bg); padding: 1px 5px;
-      border-radius: 4px; font-size: .82em;
+      background: var(--stage-bg);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: .82em;
     }
 
     /* ── loading / offline badge ── */
     .toast {
-      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-      background: #333; color: #fff; padding: 8px 18px;
-      border-radius: 20px; font-size: .78rem;
-      opacity: 0; transition: opacity .3s;
-      pointer-events: none; z-index: 99;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: .78rem;
+      opacity: 0;
+      transition: opacity .3s;
+      pointer-events: none;
+      z-index: 99;
     }
-    .toast.show { opacity: 1; }
+
+    .toast.show {
+      opacity: 1;
+    }
 
     /* ── tab bar ── */
     .tab-bar {
-      display: flex; gap: 0;
+      display: flex;
+      gap: 0;
       border-bottom: 1px solid var(--border);
       margin-bottom: 12px;
     }
+
     .tab-bar button {
-      flex: 1; padding: 10px 4px;
-      border: none; border-bottom: 2px solid transparent;
-      background: none; font-size: .8rem; font-weight: 600;
-      color: var(--text-muted); cursor: pointer;
+      flex: 1;
+      padding: 10px 4px;
+      border: none;
+      border-bottom: 2px solid transparent;
+      background: none;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
       transition: color .15s, border-color .15s;
     }
+
     .tab-bar button.active {
-      color: var(--accent); border-bottom-color: var(--accent);
+      color: var(--accent);
+      border-bottom-color: var(--accent);
     }
 
     /* ── tab panels ── */
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
 
     /* ── map ── */
     .map-container {
-      position: relative; width: 100%;
-      border-radius: 10px; overflow: hidden;
+      position: relative;
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
       border: 1px solid var(--border);
       touch-action: manipulation;
-      user-select: none; -webkit-user-select: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
+
     .map-container img {
-      width: 100%; display: block; pointer-events: none;
-      user-select: none; -webkit-user-select: none;
+      width: 100%;
+      display: block;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
+
     .map-marker {
-      position: absolute; transform: translate(-50%, -100%);
-      font-size: .8rem; pointer-events: auto; cursor: pointer;
-      z-index: 2; filter: drop-shadow(0 1px 2px rgba(0,0,0,.4));
+      position: absolute;
+      transform: translate(-50%, -100%);
+      font-size: .8rem;
+      pointer-events: auto;
+      cursor: pointer;
+      z-index: 2;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .4));
     }
+
     .map-marker .label {
-      position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-      font-size: .55rem; font-weight: 600; white-space: nowrap;
-      background: var(--card-bg); color: var(--text);
-      padding: 1px 6px; border-radius: 8px; border: 1px solid var(--border);
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: .55rem;
+      font-weight: 600;
+      white-space: nowrap;
+      background: var(--card-bg);
+      color: var(--text);
+      padding: 1px 6px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
       margin-top: 1px;
     }
+
     .map-toolbar {
-      display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap;
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
     }
+
     .map-toolbar button {
-      padding: 6px 12px; border: 1px solid var(--border);
-      border-radius: 16px; background: var(--card-bg);
-      font-size: .75rem; font-weight: 600; color: var(--text);
-      cursor: pointer; user-select: none; -webkit-user-select: none;
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--card-bg);
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
     }
-    .map-toolbar button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-    .map-toolbar button.accent { background: var(--accent); color: #fff; border-color: var(--accent); }
-    .map-share-wrap { text-align: center; margin-top: 10px; }
+
+    .map-toolbar button.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .map-toolbar button.accent {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .map-share-wrap {
+      text-align: center;
+      margin-top: 10px;
+    }
+
     .map-share-wrap button {
-      padding: 8px 20px; border: 1px solid var(--border);
-      border-radius: 16px; background: var(--card-bg);
-      font-size: .78rem; font-weight: 600; color: var(--text);
-      cursor: pointer; user-select: none; -webkit-user-select: none;
+      padding: 8px 20px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--card-bg);
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
     }
-    .map-help { font-size: .7rem; color: var(--text-muted); margin-top: 8px; user-select: none; -webkit-user-select: none; }
+
+    .map-help {
+      font-size: .7rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      user-select: none;
+      -webkit-user-select: none;
+    }
 
     /* ── notifications ── */
     .notif-input {
-      display: flex; gap: 8px; margin-bottom: 12px;
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
     }
+
     .notif-input input {
-      flex: 1; padding: 10px 12px;
-      border: 1px solid var(--border); border-radius: 10px;
-      background: var(--card-bg); color: var(--text); font-size: .85rem;
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--card-bg);
+      color: var(--text);
+      font-size: .85rem;
     }
+
     .notif-input button {
-      padding: 10px 16px; border: none; border-radius: 10px;
-      background: var(--accent); color: #fff; font-weight: 600; font-size: .85rem; cursor: pointer;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      font-size: .85rem;
+      cursor: pointer;
     }
-    .notif-list { list-style: none; }
+
+    .notif-list {
+      list-style: none;
+    }
+
     .notif-list li {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 12px; background: var(--card-bg);
-      border: 1px solid var(--border); border-radius: 10px;
-      margin-bottom: 6px; font-size: .85rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 6px;
+      font-size: .85rem;
     }
-    .notif-list li .time { font-size: .68rem; color: var(--text-muted); flex-shrink: 0; }
-    .notif-list li .text { flex: 1; }
+
+    .notif-list li .time {
+      font-size: .68rem;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .notif-list li .text {
+      flex: 1;
+    }
+
     .notif-list li .del {
-      border: none; background: none; font-size: 1rem;
-      cursor: pointer; color: var(--text-muted); padding: 4px;
+      border: none;
+      background: none;
+      font-size: 1rem;
+      cursor: pointer;
+      color: var(--text-muted); padding: 4px;
+    }
+    .notif-md { margin-bottom: 16px; }
+    .notif-md ul { list-style: none; padding: 0; }
+    .notif-md li {
+      padding: 8px 12px; margin-bottom: 6px;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 8px; font-size: .82rem;
     }
   </style>
 </head>
+
 <body>
   <header>
     <button class="back" id="backBtn" aria-label="Back">←</button>
@@ -289,8 +599,8 @@
     const $listing = document.getElementById('listing');
     const $content = document.getElementById('content');
     const $backBtn = document.getElementById('backBtn');
-    const $title   = document.getElementById('pageTitle');
-    const $toast   = document.getElementById('toast');
+    const $title = document.getElementById('pageTitle');
+    const $toast = document.getElementById('toast');
 
     let pages = [];
     let isOnline = navigator.onLine;
@@ -308,7 +618,7 @@
       try {
         const res = await fetch('pages.json');
         pages = await res.json();
-      } catch(e) {
+      } catch (e) {
         // fallback: show only if we can't load
         pages = [];
       }
@@ -388,7 +698,7 @@
         let tableHtml = '<div class="table-wrap"><table>';
         if (hasHeader) {
           tableHtml += '<thead><tr>';
-          headerCells.forEach(c => { tableHtml += `<th>${c}</th>`; });
+          headerCells.forEach(c => {tableHtml += `<th>${c}</th>`;});
           tableHtml += '</tr></thead>';
         }
 
@@ -426,7 +736,7 @@
     }
 
     function escAttr(s) {
-      return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
     let activeTab = null;
@@ -434,7 +744,7 @@
     // ── load & render a page ──
     async function loadPage(slug) {
       const page = pages.find(p => p.slug === slug);
-      if (!page) { showListing(); return; }
+      if (!page) {showListing(); return;}
 
       $listing.classList.remove('active');
       $content.classList.add('active');
@@ -448,22 +758,30 @@
         const md = await res.text();
         const html = md2html(md);
 
+        // try loading notifications.md
+        let notifHtml = '';
+        try {
+          const notifPath = slug + '/notifications.md';
+          const nres = await fetch(notifPath);
+          if (nres.ok) { notifHtmlCache = notifHtml = md2html(await nres.text()); }
+        } catch(e) {}
+
         const defaultTab = activeTab || 'artists';
         $content.innerHTML =
           '<nav class="tab-bar">' +
-            '<button class="tab' + (defaultTab === 'artists' ? ' active' : '') + '" data-tab="artists">Artists</button>' +
-            '<button class="tab' + (defaultTab === 'locations' ? ' active' : '') + '" data-tab="locations">Locations</button>' +
-            '<button class="tab' + (defaultTab === 'notifications' ? ' active' : '') + '" data-tab="notifications">Notifications</button>' +
+          '<button class="tab' + (defaultTab === 'artists' ? ' active' : '') + '" data-tab="artists">Artists</button>' +
+          '<button class="tab' + (defaultTab === 'locations' ? ' active' : '') + '" data-tab="locations">Locations</button>' +
+          '<button class="tab' + (defaultTab === 'notifications' ? ' active' : '') + '" data-tab="notifications">Notifications</button>' +
           '</nav>' +
           '<div class="tab-panel tab-artists' + (defaultTab === 'artists' ? ' active' : '') + '"><div class="md">' + html + '</div></div>' +
           '<div class="tab-panel tab-locations' + (defaultTab === 'locations' ? ' active' : '') + '">' + buildLocationsPanel(page) + '</div>' +
-          '<div class="tab-panel tab-notifications' + (defaultTab === 'notifications' ? ' active' : '') + '">' + buildNotificationsPanel() + '</div>';
+          '<div class="tab-panel tab-notifications' + (defaultTab === 'notifications' ? ' active' : '') + '">' + buildNotificationsPanel(notifHtml) + '</div>';
 
         wireTabs(slug);
         if (page.map) initMap(slug, page.map);
         initNotifications(slug);
         if (defaultTab === 'artists') scrollToNow();
-      } catch(e) {
+      } catch (e) {
         $content.innerHTML = '<p style="color:var(--text-muted)">Failed to load page. Check your connection.</p>';
       }
     }
@@ -486,7 +804,7 @@
       if (pages.length > 0) {
         loadPage(slug);
       } else {
-        loadIndex().then(() => { if (window.location.hash) route(); });
+        loadIndex().then(() => {if (window.location.hash) route();});
       }
     }
 
@@ -496,7 +814,7 @@
     // ── scroll to current day ──
     function scrollToNow() {
       // Appletree Garden 2026: July 30 (Thu), 31 (Fri), Aug 1 (Sat)
-      const dayMap = { 4:'Thursday', 5:'Friday', 6:'Saturday' };
+      const dayMap = {4: 'Thursday', 5: 'Friday', 6: 'Saturday'};
       const today = new Date();
       const target = dayMap[today.getDay()];
       if (!target) return;
@@ -504,7 +822,7 @@
       const h2s = document.querySelectorAll('.md h2');
       for (const h of h2s) {
         if (h.textContent.toLowerCase().startsWith(target.toLowerCase())) {
-          h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          h.scrollIntoView({behavior: 'smooth', block: 'start'});
           return;
         }
       }
@@ -536,14 +854,14 @@
       const mapSrc = page.map || '';
       return '' +
         '<div class="map-toolbar" id="mapToolbar">' +
-          '<button data-mode="tent">⛺ Tent</button>' +
-          '<button data-mode="meet">📍 Meet</button>' +
-          '<button data-mode="me">🙂 Me</button>' +
-          '<button id="clearMarkers">✕ Clear</button>' +
+        '<button data-mode="tent">⛺ Tent</button>' +
+        '<button data-mode="meet">📍 Meet</button>' +
+        '<button data-mode="me">🙂 Me</button>' +
+        '<button id="clearMarkers">✕ Clear</button>' +
         '</div>' +
         '<div class="map-container" id="mapContainer">' +
-          '<img src="' + mapSrc + '" id="mapImg" alt="Festival map">' +
-          '<div id="markersLayer"></div>' +
+        '<img src="' + mapSrc + '" id="mapImg" alt="Festival map">' +
+        '<div id="markersLayer"></div>' +
         '</div>' +
         '<div class="map-share-wrap"><button id="shareMap">📤 Share my map</button></div>' +
         '<p class="map-help">Select a type above, then tap the map to place or move it. Tap a marker to select it for moving. Long-press to label or remove.</p>';
@@ -559,15 +877,15 @@
 
       // load saved markers
       let markers = [];
-      try { markers = JSON.parse(localStorage.getItem(storageKey)) || []; } catch(e) {}
+      try {markers = JSON.parse(localStorage.getItem(storageKey)) || [];} catch (e) { }
 
-      const EMOJI = { tent:'⛺', meet:'📍', me:'🙂' };
+      const EMOJI = {tent: '⛺', meet: '📍', me: '🙂'};
 
-      function save() { localStorage.setItem(storageKey, JSON.stringify(markers)); }
+      function save() {localStorage.setItem(storageKey, JSON.stringify(markers));}
 
       // migrate old 'here' type
       let migrated = false;
-      markers.forEach(m => { if (m.type === 'here') { m.type = 'me'; migrated = true; } });
+      markers.forEach(m => {if (m.type === 'here') {m.type = 'me'; migrated = true;} });
       if (migrated) save();
 
       function deselectMode() {
@@ -593,7 +911,7 @@
           markers[existing].x = Math.round(x * 10) / 10;
           markers[existing].y = Math.round(y * 10) / 10;
         } else {
-          markers.push({ type: mode, x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10, label: '' });
+          markers.push({type: mode, x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10, label: ''});
         }
         save();
         renderMarkers();
@@ -611,18 +929,18 @@
           // tap existing marker to select its type for moving
           el.addEventListener('click', e => {
             e.stopPropagation();
-            if (mode === m.type) { deselectMode(); return; }
+            if (mode === m.type) {deselectMode(); return;}
             selectMode(m.type);
           });
           // long press to label or remove
           el.addEventListener('touchstart', function start(ev) {
             const timer = setTimeout(() => {
               const lbl = prompt('Label (empty to remove):', m.label || '');
-              if (lbl === '') { markers.splice(i, 1); save(); renderMarkers(); return; }
-              if (lbl !== null) { m.label = lbl; save(); renderMarkers(); }
+              if (lbl === '') {markers.splice(i, 1); save(); renderMarkers(); return;}
+              if (lbl !== null) {m.label = lbl; save(); renderMarkers();}
             }, 600);
-            el.addEventListener('touchend', () => clearTimeout(timer), { once: true });
-            el.addEventListener('touchmove', () => clearTimeout(timer), { once: true });
+            el.addEventListener('touchend', () => clearTimeout(timer), {once: true});
+            el.addEventListener('touchmove', () => clearTimeout(timer), {once: true});
           });
           markersLayer.appendChild(el);
         });
@@ -641,14 +959,14 @@
       toolbar.querySelectorAll('[data-mode]').forEach(btn => {
         btn.addEventListener('click', () => {
           const m = btn.dataset.mode;
-          if (mode === m) { deselectMode(); return; }
+          if (mode === m) {deselectMode(); return;}
           selectMode(m);
           // if marker of this type exists, it's highlighted via selectMode
         });
       });
 
       document.getElementById('clearMarkers').addEventListener('click', () => {
-        if (confirm('Remove all markers?')) { markers = []; save(); renderMarkers(); }
+        if (confirm('Remove all markers?')) {markers = []; save(); renderMarkers();}
       });
 
       document.getElementById('shareMap').addEventListener('click', () => {
@@ -679,9 +997,9 @@
         // use toDataURL to stay within the click gesture
         const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
         const blob = dataURLtoBlob(dataUrl);
-        const file = new File([blob], 'location.jpg', { type: 'image/jpeg' });
+        const file = new File([blob], 'location.jpg', {type: 'image/jpeg'});
         if (navigator.share) {
-          navigator.share({ files: [file] }).catch(() => {
+          navigator.share({files: [file]}).catch((err) => {
             // file share failed, fall back to download
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
@@ -700,18 +1018,19 @@
         const bytes = atob(parts[1]);
         const buf = new Uint8Array(bytes.length);
         for (let i = 0; i < bytes.length; i++) buf[i] = bytes.charCodeAt(i);
-        return new Blob([buf], { type: mime });
+        return new Blob([buf], {type: mime});
       }
 
       renderMarkers();
     }
 
     // ── notifications panel ──
-    function buildNotificationsPanel() {
+    function buildNotificationsPanel(notifHtml) {
       return '' +
+        (notifHtml ? '<div class="md notif-md">' + notifHtml + '</div>' : '') +
         '<div class="notif-input">' +
-          '<input id="notifInput" type="text" placeholder="Add a reminder…">' +
-          '<button id="notifAdd">Add</button>' +
+        '<input id="notifInput" type="text" placeholder="Add a reminder…">' +
+        '<button id="notifAdd">Add</button>' +
         '</div>' +
         '<ul class="notif-list" id="notifList"></ul>';
     }
@@ -723,12 +1042,12 @@
 
       const storageKey = slug + '-notifs';
       let notifs = [];
-      try { notifs = JSON.parse(localStorage.getItem(storageKey)) || []; } catch(e) {}
+      try {notifs = JSON.parse(localStorage.getItem(storageKey)) || [];} catch (e) { }
 
       const addBtn = document.getElementById('notifAdd');
       const list = document.getElementById('notifList');
 
-      function save() { localStorage.setItem(storageKey, JSON.stringify(notifs)); }
+      function save() {localStorage.setItem(storageKey, JSON.stringify(notifs));}
 
       function render() {
         list.innerHTML = '';
@@ -736,7 +1055,7 @@
           const li = document.createElement('li');
           const d = new Date(n.ts);
           li.innerHTML = '' +
-            '<span class="time">' + d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) + '</span>' +
+            '<span class="time">' + d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) + '</span>' +
             '<span class="text">' + esc(n.text) + '</span>' +
             '<button class="del" data-i="' + i + '">✕</button>';
           list.appendChild(li);
@@ -752,7 +1071,7 @@
       addBtn.addEventListener('click', () => {
         const text = input.value.trim();
         if (!text) return;
-        notifs.unshift({ text, ts: Date.now() });
+        notifs.unshift({text, ts: Date.now()});
         save(); render();
         input.value = '';
       });
@@ -764,8 +1083,8 @@
     }
 
     // online/offline
-    window.addEventListener('online', () => { isOnline = true; toast('Back online'); });
-    window.addEventListener('offline', () => { isOnline = false; toast('Offline — cached pages available'); });
+    window.addEventListener('online', () => {isOnline = true; toast('Back online');});
+    window.addEventListener('offline', () => {isOnline = false; toast('Offline — cached pages available');});
 
 
 
@@ -774,8 +1093,9 @@
 
     // ── register service worker ──
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
+      navigator.serviceWorker.register('sw.js').catch(() => { });
     }
   </script>
 </body>
+
 </html>
