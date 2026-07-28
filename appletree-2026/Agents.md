@@ -63,8 +63,62 @@ The schedule is rendered by `index.html` via:
 - Client-side markdown parser converts `.md` to HTML on the fly
 - Tables become card layout on mobile (<520px)
 
+## Notifications
+
+Notifications are stored in `notifications.md` alongside `schedule.md`. They are rendered in the **Notifications** tab of the app.
+
+### Format
+
+```markdown
+## ℹ️ Info
+- Info notification text
+
+## ⚠️ Warnings
+- Warning notification text
+
+## 🚨 Emergency / Awareness
+- Urgent notification text
+```
+
+### Category Order
+
+Categories must always appear in this order (emergency first):
+1. `## 🚨 Awareness` — always at the top
+2. `## ⚠️ Warnings` — time-sensitive or safety warnings
+3. `## ℹ️ Info` — general information, feature announcements
+
+### Feature Announcements
+
+Every time a new feature is added to the app, add an `## ℹ️ Info` notification explaining:
+- What the feature does
+- How to use it
+
+Keep it short — one list item per feature. Example:
+```markdown
+- **Locations tab**: tap the map to drop markers for your tent (⛺), meeting spot (📍), or yourself (🙂). Long-press a marker to label or remove it
+```
+
+### Adding Notifications
+
+Notifications are requested via **GitHub Issues** on the repo. To add one:
+
+1. A user opens an issue describing the notification
+2. An agent edits `notifications.md` and adds the entry under the appropriate category
+3. Follow the category order above — emergency always at the top
+4. The agent commits and pushes — GitHub Actions redeploys the site automatically
+
+### Factual Sources
+
+Always verify notification facts against the official festival info page:
+- https://appletreegarden.de/infos/ (general info, awareness, accessibility, cashless)
+- https://appletreegarden.de/programm/ (timetable changes)
+
+Only include information that is confirmed on the official site. Mark speculative or user-reported info clearly.
+
 ## Notes
 
 - **bangerfabrique**: Hamburg German rap collective, Saturday night 01:00–02:00, Zirkus Zelt.
+- **Awareness team**: purple vests, 24h phone **0152 03566598**, also via security/bars/awareness stand
+- **Cashless**: wristband payment only, top up at https://appletreegarden.de/cashless/
 - Festival dates for 2026: July 30 – August 1 (Thursday–Saturday).
 - The festival takes a break year in 2027 (25th anniversary in 2026).
