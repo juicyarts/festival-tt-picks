@@ -231,6 +231,7 @@
       font-size: .75rem; font-weight: 600; color: var(--text);
       cursor: pointer;
     }
+    .map-toolbar button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
     .map-toolbar button.accent { background: var(--accent); color: #fff; border-color: var(--accent); }
 
     /* ── notifications ── */
@@ -534,7 +535,7 @@
       const markersLayer = document.getElementById('markersLayer');
       const img = document.getElementById('mapImg');
       const toolbar = document.getElementById('mapToolbar');
-      let mode = 'tent';
+      let mode = null; // null = no type selected
       const storageKey = slug + '-markers';
 
       // load saved markers
@@ -545,6 +546,36 @@
 
       function save() { localStorage.setItem(storageKey, JSON.stringify(markers)); }
 
+      function deselectMode() {
+        mode = null;
+        toolbar.querySelectorAll('[data-mode]').forEach(b => b.classList.remove('active'));
+      }
+
+      function selectMode(m) {
+        toolbar.querySelectorAll('[data-mode]').forEach(b => b.classList.remove('active'));
+        mode = m;
+        const btn = toolbar.querySelector('[data-mode="' + m + '"]');
+        if (btn) btn.classList.add('active');
+      }
+
+      function getMarkerIndex(type) {
+        return markers.findIndex(m => m.type === type);
+      }
+
+      function placeOrMove(x, y) {
+        if (!mode) return;
+        const existing = getMarkerIndex(mode);
+        if (existing >= 0) {
+          markers[existing].x = Math.round(x * 10) / 10;
+          markers[existing].y = Math.round(y * 10) / 10;
+        } else {
+          markers.push({ type: mode, x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10, label: '' });
+        }
+        save();
+        renderMarkers();
+        deselectMode();
+      }
+
       function renderMarkers() {
         markersLayer.innerHTML = '';
         markers.forEach((m, i) => {
@@ -553,17 +584,17 @@
           el.style.left = m.x + '%';
           el.style.top = m.y + '%';
           el.innerHTML = EMOJI[m.type] + (m.label ? '<span class="label">' + esc(m.label) + '</span>' : '');
-          el.title = 'Tap to remove';
+          // tap existing marker to select its type for moving
           el.addEventListener('click', e => {
             e.stopPropagation();
-            markers.splice(i, 1);
-            save();
-            renderMarkers();
+            if (mode === m.type) { deselectMode(); return; }
+            selectMode(m.type);
           });
-          // long press to label
+          // long press to label or remove
           el.addEventListener('touchstart', function start(ev) {
             const timer = setTimeout(() => {
-              const lbl = prompt('Label:', m.label || '');
+              const lbl = prompt('Label (empty to remove):', m.label || '');
+              if (lbl === '') { markers.splice(i, 1); save(); renderMarkers(); return; }
               if (lbl !== null) { m.label = lbl; save(); renderMarkers(); }
             }, 600);
             el.addEventListener('touchend', () => clearTimeout(timer), { once: true });
@@ -574,24 +605,23 @@
       }
 
       container.addEventListener('click', e => {
+        if (!mode) return;
         if (e.target.closest('.map-marker')) return;
         const rect = container.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
-        markers.push({ type: mode, x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10, label: '' });
-        save();
-        renderMarkers();
+        placeOrMove(x, y);
       });
 
-      // toolbar
+      // toolbar type buttons
       toolbar.querySelectorAll('[data-mode]').forEach(btn => {
         btn.addEventListener('click', () => {
-          toolbar.querySelectorAll('[data-mode]').forEach(b => b.style.outline = '');
-          mode = btn.dataset.mode;
-          btn.style.outline = '2px solid var(--accent)';
+          const m = btn.dataset.mode;
+          if (mode === m) { deselectMode(); return; }
+          selectMode(m);
+          // if marker of this type exists, it's highlighted via selectMode
         });
       });
-      toolbar.querySelector('[data-mode="tent"]').style.outline = '2px solid var(--accent)';
 
       document.getElementById('clearMarkers').addEventListener('click', () => {
         if (confirm('Remove all markers?')) { markers = []; save(); renderMarkers(); }
