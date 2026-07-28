@@ -529,7 +529,7 @@
         '<div class="map-toolbar" id="mapToolbar">' +
           '<button data-mode="tent">⛺ Tent</button>' +
           '<button data-mode="meet">📍 Meet</button>' +
-          '<button data-mode="here">🔵 Here</button>' +
+          '<button data-mode="me">🙂 Me</button>' +
           '<button id="clearMarkers">✕ Clear</button>' +
         '</div>' +
         '<div class="map-container" id="mapContainer">' +
@@ -552,9 +552,14 @@
       let markers = [];
       try { markers = JSON.parse(localStorage.getItem(storageKey)) || []; } catch(e) {}
 
-      const EMOJI = { tent:'⛺', meet:'📍', here:'🔵' };
+      const EMOJI = { tent:'⛺', meet:'📍', me:'🙂' };
 
       function save() { localStorage.setItem(storageKey, JSON.stringify(markers)); }
+
+      // migrate old 'here' type
+      let migrated = false;
+      markers.forEach(m => { if (m.type === 'here') { m.type = 'me'; migrated = true; } });
+      if (migrated) save();
 
       function deselectMode() {
         mode = null;
@@ -593,7 +598,7 @@
           el.className = 'map-marker';
           el.style.left = m.x + '%';
           el.style.top = m.y + '%';
-          el.innerHTML = EMOJI[m.type] + (m.label ? '<span class="label">' + esc(m.label) + '</span>' : '');
+          el.innerHTML = (EMOJI[m.type] || '📍') + (m.label ? '<span class="label">' + esc(m.label) + '</span>' : '');
           // tap existing marker to select its type for moving
           el.addEventListener('click', e => {
             e.stopPropagation();
@@ -651,7 +656,7 @@
           const my = (m.y / 100) * ch;
           ctx.font = Math.round(cw * 0.04) + 'px sans-serif';
           ctx.textAlign = 'center';
-          ctx.fillText(EMOJI[m.type], mx, my);
+          ctx.fillText(EMOJI[m.type] || '📍', mx, my);
           if (m.label) {
             ctx.font = Math.round(cw * 0.018) + 'px sans-serif';
             ctx.fillStyle = '#000';
