@@ -148,22 +148,6 @@
       .md td:first-child { font-weight: 600; font-size: .92rem; margin-bottom: 6px; }
       .md td:first-child::before { display: none; }
 
-      /* summary column — collapsible */
-      .md td.summary-cell .summary-text {
-        display: block;
-        max-height: 2.7em;
-        overflow: hidden;
-      }
-      .md td.summary-cell.expanded .summary-text {
-        max-height: none;
-        overflow: visible;
-      }
-      .md td.summary-cell .summary-toggle {
-        display: inline-block; font-size: .7rem; font-weight: 600;
-        color: var(--link); margin-top: 2px;
-        cursor: pointer; user-select: none;
-        background: none; border: none; padding: 2px 0;
-      }
     }
 
     .md blockquote {
@@ -316,13 +300,7 @@
           tableHtml += '<tr>';
           cells.forEach((c, ci) => {
             const label = hasHeader && headerCells[ci] ? headerCells[ci] : '';
-            const isLast = ci === cells.length - 1;
-            let cls = isLast ? ' class="summary-cell"' : '';
-            let inner = c;
-            if (isLast) {
-              inner = `<span class="summary-text">${c}</span><button class="summary-toggle">⋯ more</button>`;
-            }
-            tableHtml += `<td data-label="${escAttr(label)}"${cls}>${inner}</td>`;
+            tableHtml += `<td data-label="${escAttr(label)}">${c}</td>`;
           });
           tableHtml += '</tr>';
         }
@@ -403,14 +381,7 @@
     window.addEventListener('online', () => { isOnline = true; toast('Back online'); });
     window.addEventListener('offline', () => { isOnline = false; toast('Offline — cached pages available'); });
 
-    // ── summary toggle (delegated) ──
-    document.addEventListener('click', e => {
-      const btn = e.target.closest('.summary-toggle');
-      if (!btn) return;
-      const cell = btn.closest('.summary-cell');
-      const expanded = cell.classList.toggle('expanded');
-      btn.textContent = expanded ? '▲ less' : '⋯ more';
-    });
+
 
     // ── init ──
     loadIndex().then(() => route());
