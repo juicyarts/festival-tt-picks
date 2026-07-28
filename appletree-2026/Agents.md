@@ -63,8 +63,50 @@ The schedule is rendered by `index.html` via:
 - Client-side markdown parser converts `.md` to HTML on the fly
 - Tables become card layout on mobile (<520px)
 
+## Notifications
+
+Notifications are stored in `notifications.md` alongside `schedule.md`. They are rendered in the **Notifications** tab of the app.
+
+### Format
+
+```markdown
+## ℹ️ Info
+- Info notification text
+
+## ⚠️ Warnings
+- Warning notification text
+
+## 🚨 Emergency / Awareness
+- Urgent notification text
+```
+
+Supported categories (use `##` headings):
+- `## ℹ️ Info` — general information
+- `## ⚠️ Warnings` — things to be careful about
+- `## 🚨 Emergency` or `## 🚨 Awareness` — urgent/awareness info
+
+Each notification is a markdown list item (`- text`). Links and **bold** are supported.
+
+### Adding Notifications
+
+Notifications are requested via **GitHub Issues** on the repo. To add one:
+
+1. A user opens an issue describing the notification
+2. An agent edits `notifications.md` and adds the entry under the appropriate category
+3. The agent commits and pushes — GitHub Actions redeploys the site automatically
+
+### Factual Sources
+
+Always verify notification facts against the official festival info page:
+- https://appletreegarden.de/infos/ (general info, awareness, accessibility, cashless)
+- https://appletreegarden.de/programm/ (timetable changes)
+
+Only include information that is confirmed on the official site. Mark speculative or user-reported info clearly.
+
 ## Notes
 
 - **bangerfabrique**: Hamburg German rap collective, Saturday night 01:00–02:00, Zirkus Zelt.
+- **Awareness team**: purple vests, 24h phone **0152 03566598**, also via security/bars/awareness stand
+- **Cashless**: wristband payment only, top up at https://appletreegarden.de/cashless/
 - Festival dates for 2026: July 30 – August 1 (Thursday–Saturday).
 - The festival takes a break year in 2027 (25th anniversary in 2026).

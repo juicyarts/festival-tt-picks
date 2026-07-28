@@ -1,17 +1,9 @@
-## ⚠️ Warnings
-
-- Bring cash — not all food stalls accept cards
-- Phone signal is very spotty on the festival grounds. Download the timetable before arriving
-- The Oase stage is tucked away behind the forest — budget 10 min to walk there
-
 ## ℹ️ Info
 
-- Gates open Thu 14:00, Fri+Sat 11:00
-- Free drinking water stations at Main Stage and Oase
-- Left luggage / locker rental at the entrance (€5/day)
-- Silent disco at Glitzer Salon every night 02:00–04:00
+- Welcome to Achja! This is an AI-driven festival companion, so it's experimental and might not be totally accurate, but I'll try my best ;). In urgent cases inform juicy to post a notification here to inform other users of the app! Have fun and keep yourself and the folks around you safe ❤️
 
-## 🚨 Emergency
+## 🚨 Awareness
 
-- First aid tent behind Main Stage (open 24h)
-- Awareness team reachable at **0151-12345678** or at the awareness tent near the entrance
+- Awareness team wears **purple vests** — reach them 24h during the festival at **0152 03566598**
+- You can also approach security, any bar staff, or the awareness info stand
+- Festival is **cashless** — pay with your wristband. Top up [online](https://appletreegarden.de/cashless/) or on site
