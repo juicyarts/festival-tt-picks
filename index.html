@@ -354,7 +354,7 @@
         const md = await res.text();
         const html = md2html(md);
         $content.innerHTML = '<div class="md">' + html + '</div>';
-        // save to cache for offline via service worker
+        scrollToNow();
       } catch(e) {
         $content.innerHTML = '<p style="color:var(--text-muted)">Failed to load page. Check your connection.</p>';
       }
@@ -383,6 +383,23 @@
 
     $backBtn.addEventListener('click', showListing);
     window.addEventListener('hashchange', route);
+
+    // ── scroll to current day ──
+    function scrollToNow() {
+      // Appletree Garden 2026: July 23 (Thu), 24 (Fri), 25 (Sat)
+      const dayMap = { 4:'Thursday', 5:'Friday', 6:'Saturday' };
+      const today = new Date();
+      const target = dayMap[today.getDay()];
+      if (!target) return;
+      // find the h2 heading matching the target day
+      const h2s = document.querySelectorAll('.md h2');
+      for (const h of h2s) {
+        if (h.textContent.toLowerCase().startsWith(target.toLowerCase())) {
+          h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+      }
+    }
 
     // online/offline
     window.addEventListener('online', () => { isOnline = true; toast('Back online'); });
