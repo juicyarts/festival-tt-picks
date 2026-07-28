@@ -121,6 +121,7 @@
     .md td {
       padding: 8px 8px; border-bottom: 1px solid var(--border);
       vertical-align: top;
+      word-break: break-word; overflow-wrap: break-word; hyphens: auto;
     }
     .md tr:last-child td { border-bottom: none; }
 
@@ -136,7 +137,9 @@
       }
       .md td {
         border: none; padding: 4px 0; display: block; font-size: .82rem;
+        word-break: break-word; overflow-wrap: break-word;
       }
+      .md tr { overflow: hidden; }
       .md td::before {
         content: attr(data-label);
         display: block;
