@@ -38,14 +38,9 @@ Each table row follows this structure:
 
 - **Artist**: Linked to Spotify (or SoundCloud if no Spotify). Unlinked if no streaming profile found.
 - **Time**: Start–end from the timetable. DJ/headliner sets typically 60–90 min, live acts ~45 min.
-- **Stage**: English translation of German stage names:
-  - `Große Bühne` → `Main Stage`
-  - `Tiefes Holz` → `Deep Wood`
-  - `Wald Bühne` → `Forest Stage`
-  - `Zirkus Zelt` → `Circus Tent`
-  - `Oase` → `Oasis`
+- **Stage**: Keep original German stage names:
+  - `Große Bühne`, `Tiefes Holz`, `Wald Bühne`, `Zirkus Zelt`, `Oase`, `Glitzer Salon`
   - `?` = unknown (check timetable)
-  - `Glitzer Salon` → `Glitter Salon`
 - **Rating**:
   - `++` = don't miss
   - `+` = priority
@@ -70,6 +65,6 @@ The schedule is rendered by `index.html` via:
 
 ## Notes
 
-- **bangerfabrique**: Hamburg German rap collective, Saturday night 01:00–02:00. Stage TBD.
+- **bangerfabrique**: Hamburg German rap collective, Saturday night 01:00–02:00, Zirkus Zelt.
 - Festival dates for 2026: July 30 – August 1 (Thursday–Saturday).
 - The festival takes a break year in 2027 (25th anniversary in 2026).
