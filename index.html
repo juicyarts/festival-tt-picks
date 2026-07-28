@@ -177,6 +177,88 @@
       pointer-events: none; z-index: 99;
     }
     .toast.show { opacity: 1; }
+
+    /* ── tab bar ── */
+    .tab-bar {
+      display: flex; gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+    .tab-bar button {
+      flex: 1; padding: 10px 4px;
+      border: none; border-bottom: 2px solid transparent;
+      background: none; font-size: .8rem; font-weight: 600;
+      color: var(--text-muted); cursor: pointer;
+      transition: color .15s, border-color .15s;
+    }
+    .tab-bar button.active {
+      color: var(--accent); border-bottom-color: var(--accent);
+    }
+
+    /* ── tab panels ── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── map ── */
+    .map-container {
+      position: relative; width: 100%;
+      border-radius: 10px; overflow: hidden;
+      border: 1px solid var(--border);
+      touch-action: manipulation;
+    }
+    .map-container img {
+      width: 100%; display: block; pointer-events: none;
+      user-select: none; -webkit-user-select: none;
+    }
+    .map-marker {
+      position: absolute; transform: translate(-50%, -100%);
+      font-size: 1.4rem; pointer-events: auto; cursor: pointer;
+      z-index: 2; filter: drop-shadow(0 1px 2px rgba(0,0,0,.4));
+    }
+    .map-marker .label {
+      position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+      font-size: .62rem; font-weight: 600; white-space: nowrap;
+      background: var(--card-bg); color: var(--text);
+      padding: 1px 6px; border-radius: 8px; border: 1px solid var(--border);
+      margin-top: 1px;
+    }
+    .map-toolbar {
+      display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap;
+    }
+    .map-toolbar button {
+      padding: 6px 12px; border: 1px solid var(--border);
+      border-radius: 16px; background: var(--card-bg);
+      font-size: .75rem; font-weight: 600; color: var(--text);
+      cursor: pointer;
+    }
+    .map-toolbar button.accent { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    /* ── notifications ── */
+    .notif-input {
+      display: flex; gap: 8px; margin-bottom: 12px;
+    }
+    .notif-input input {
+      flex: 1; padding: 10px 12px;
+      border: 1px solid var(--border); border-radius: 10px;
+      background: var(--card-bg); color: var(--text); font-size: .85rem;
+    }
+    .notif-input button {
+      padding: 10px 16px; border: none; border-radius: 10px;
+      background: var(--accent); color: #fff; font-weight: 600; font-size: .85rem; cursor: pointer;
+    }
+    .notif-list { list-style: none; }
+    .notif-list li {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: 10px;
+      margin-bottom: 6px; font-size: .85rem;
+    }
+    .notif-list li .time { font-size: .68rem; color: var(--text-muted); flex-shrink: 0; }
+    .notif-list li .text { flex: 1; }
+    .notif-list li .del {
+      border: none; background: none; font-size: 1rem;
+      cursor: pointer; color: var(--text-muted); padding: 4px;
+    }
   </style>
 </head>
 <body>
@@ -353,7 +435,20 @@
         if (!res.ok) throw new Error('Not found');
         const md = await res.text();
         const html = md2html(md);
-        $content.innerHTML = '<div class="md">' + html + '</div>';
+
+        $content.innerHTML =
+          '<nav class="tab-bar">' +
+            '<button class="tab active" data-tab="artists">Artists</button>' +
+            '<button class="tab" data-tab="locations">Locations</button>' +
+            '<button class="tab" data-tab="notifications">Notifications</button>' +
+          '</nav>' +
+          '<div class="tab-panel tab-artists active"><div class="md">' + html + '</div></div>' +
+          '<div class="tab-panel tab-locations">' + buildLocationsPanel(page) + '</div>' +
+          '<div class="tab-panel tab-notifications">' + buildNotificationsPanel() + '</div>';
+
+        wireTabs(slug);
+        if (page.map) initMap(slug, page.map);
+        initNotifications(slug);
         scrollToNow();
       } catch(e) {
         $content.innerHTML = '<p style="color:var(--text-muted)">Failed to load page. Check your connection.</p>';
@@ -399,6 +494,197 @@
           return;
         }
       }
+    }
+
+    // ── tabs ──
+    function wireTabs(slug) {
+      const tabs = document.querySelectorAll('.tab-bar button');
+      const panels = document.querySelectorAll('.tab-panel');
+      tabs.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabs.forEach(b => b.classList.remove('active'));
+          panels.forEach(p => p.classList.remove('active'));
+          btn.classList.add('active');
+          document.querySelector('.tab-' + btn.dataset.tab).classList.add('active');
+          // re-scroll if artists tab selected
+          if (btn.dataset.tab === 'artists') scrollToNow();
+        });
+      });
+    }
+
+    // ── locations panel ──
+    function buildLocationsPanel(page) {
+      const mapSrc = page.map || '';
+      return '' +
+        '<div class="map-toolbar" id="mapToolbar">' +
+          '<button data-mode="tent">⛺ Tent</button>' +
+          '<button data-mode="meet">📍 Meet</button>' +
+          '<button data-mode="here">🔵 Here</button>' +
+          '<button id="clearMarkers">✕ Clear</button>' +
+          '<button id="shareMap" class="accent">📤 Share</button>' +
+        '</div>' +
+        '<div class="map-container" id="mapContainer">' +
+          '<img src="' + mapSrc + '" id="mapImg" alt="Festival map">' +
+          '<div id="markersLayer"></div>' +
+        '</div>';
+    }
+
+    function initMap(slug, mapSrc) {
+      const container = document.getElementById('mapContainer');
+      const markersLayer = document.getElementById('markersLayer');
+      const img = document.getElementById('mapImg');
+      const toolbar = document.getElementById('mapToolbar');
+      let mode = 'tent';
+      const storageKey = slug + '-markers';
+
+      // load saved markers
+      let markers = [];
+      try { markers = JSON.parse(localStorage.getItem(storageKey)) || []; } catch(e) {}
+
+      const EMOJI = { tent:'⛺', meet:'📍', here:'🔵' };
+
+      function save() { localStorage.setItem(storageKey, JSON.stringify(markers)); }
+
+      function renderMarkers() {
+        markersLayer.innerHTML = '';
+        markers.forEach((m, i) => {
+          const el = document.createElement('span');
+          el.className = 'map-marker';
+          el.style.left = m.x + '%';
+          el.style.top = m.y + '%';
+          el.innerHTML = EMOJI[m.type] + (m.label ? '<span class="label">' + esc(m.label) + '</span>' : '');
+          el.title = 'Tap to remove';
+          el.addEventListener('click', e => {
+            e.stopPropagation();
+            markers.splice(i, 1);
+            save();
+            renderMarkers();
+          });
+          // long press to label
+          el.addEventListener('touchstart', function start(ev) {
+            const timer = setTimeout(() => {
+              const lbl = prompt('Label:', m.label || '');
+              if (lbl !== null) { m.label = lbl; save(); renderMarkers(); }
+            }, 600);
+            el.addEventListener('touchend', () => clearTimeout(timer), { once: true });
+            el.addEventListener('touchmove', () => clearTimeout(timer), { once: true });
+          });
+          markersLayer.appendChild(el);
+        });
+      }
+
+      container.addEventListener('click', e => {
+        if (e.target.closest('.map-marker')) return;
+        const rect = container.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        markers.push({ type: mode, x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10, label: '' });
+        save();
+        renderMarkers();
+      });
+
+      // toolbar
+      toolbar.querySelectorAll('[data-mode]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          toolbar.querySelectorAll('[data-mode]').forEach(b => b.style.outline = '');
+          mode = btn.dataset.mode;
+          btn.style.outline = '2px solid var(--accent)';
+        });
+      });
+      toolbar.querySelector('[data-mode="tent"]').style.outline = '2px solid var(--accent)';
+
+      document.getElementById('clearMarkers').addEventListener('click', () => {
+        if (confirm('Remove all markers?')) { markers = []; save(); renderMarkers(); }
+      });
+
+      document.getElementById('shareMap').addEventListener('click', () => {
+        // composite map + markers onto a canvas
+        const canvas = document.createElement('canvas');
+        const cw = img.naturalWidth || img.width;
+        const ch = img.naturalHeight || img.height;
+        canvas.width = cw; canvas.height = ch;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, cw, ch);
+        // draw markers
+        markers.forEach(m => {
+          const mx = (m.x / 100) * cw;
+          const my = (m.y / 100) * ch;
+          ctx.font = Math.round(cw * 0.04) + 'px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(EMOJI[m.type], mx, my);
+          if (m.label) {
+            ctx.font = Math.round(cw * 0.018) + 'px sans-serif';
+            ctx.fillStyle = '#000';
+            ctx.fillText(m.label, mx, my + Math.round(cw * 0.045));
+          }
+        });
+        canvas.toBlob(blob => {
+          if (!blob) return;
+          const url = URL.createObjectURL(blob);
+          if (navigator.share) {
+            navigator.share({ files: [new File([blob], 'location.png', { type: 'image/png' })] }).catch(() => {});
+          } else {
+            const a = document.createElement('a');
+            a.href = url; a.download = 'location.png'; a.click();
+          }
+        }, 'image/png');
+      });
+
+      renderMarkers();
+    }
+
+    // ── notifications panel ──
+    function buildNotificationsPanel() {
+      return '' +
+        '<div class="notif-input">' +
+          '<input id="notifInput" type="text" placeholder="Add a reminder…">' +
+          '<button id="notifAdd">Add</button>' +
+        '</div>' +
+        '<ul class="notif-list" id="notifList"></ul>';
+    }
+
+    function initNotifications(slug) {
+      const storageKey = slug + '-notifs';
+      let notifs = [];
+      try { notifs = JSON.parse(localStorage.getItem(storageKey)) || []; } catch(e) {}
+
+      const input = document.getElementById('notifInput');
+      const addBtn = document.getElementById('notifAdd');
+      const list = document.getElementById('notifList');
+
+      function save() { localStorage.setItem(storageKey, JSON.stringify(notifs)); }
+
+      function render() {
+        list.innerHTML = '';
+        notifs.forEach((n, i) => {
+          const li = document.createElement('li');
+          const d = new Date(n.ts);
+          li.innerHTML = '' +
+            '<span class="time">' + d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) + '</span>' +
+            '<span class="text">' + esc(n.text) + '</span>' +
+            '<button class="del" data-i="' + i + '">✕</button>';
+          list.appendChild(li);
+        });
+        list.querySelectorAll('.del').forEach(btn => {
+          btn.addEventListener('click', () => {
+            notifs.splice(parseInt(btn.dataset.i), 1);
+            save(); render();
+          });
+        });
+      }
+
+      addBtn.addEventListener('click', () => {
+        const text = input.value.trim();
+        if (!text) return;
+        notifs.unshift({ text, ts: Date.now() });
+        save(); render();
+        input.value = '';
+      });
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') addBtn.click();
+      });
+
+      render();
     }
 
     // online/offline
