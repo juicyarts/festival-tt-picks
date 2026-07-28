@@ -41,7 +41,7 @@
 | [Daði Freyr](https://open.spotify.com/artist/3Hb64DQZIhDCgyHKrzBXOL) | 01:00–02:30 | Forest Stage | + | Electro-Pop / Funktronica / Synth-Pop | Icelandic Eurovision cult icon (2022) — funky, funny & life-affirming electro-pop, even better live |
 | Late Night Jockel Session & Seebo | 02:00–04:00 | Oasis | — | Eclectic DJ Set / Disco | Bathrobe on, prosecco in hand — a late-night DJ joyride through decades of fat bass, disco & glorious chaos |
 | [Kataya](https://soundcloud.com/kataya_blossmbae) | 02:50–04:30 | Deep Wood | — | Space Disco / House | Back by popular demand after her 2024 Space Disco takeover — sassy grooves, cosmic bounce |
-| [bangerfabrique](https://www.instagram.com/bangerfabrique/) | 01:00–02:00 | ? | ++ | German Rap / Collective | Hamburg collective since 2023 — emancipatory rap with crushing basslines, empowering punchlines & feminist edge, live a sweaty mix of performance & club energy |
+| [bangerfabrique](https://www.instagram.com/bangerfabrique/) | 01:00–02:00 | Circus Tent | ++ | German Rap / Collective | Hamburg collective since 2023 — emancipatory rap with crushing basslines, empowering punchlines & feminist edge, live a sweaty mix of performance & club energy |
 
 ---
 
@@ -53,7 +53,7 @@
 | TH | 21:10–22:20 | **Sébastien Tellier** (Main Stage) vs **World Brain** (Oasis) — partial, catch Tellier's first 50 min then switch |
 | TH | 23:40–00:25 | **Disarstar** (Main Stage) ends 15 min before **Susi&Paula** (Deep Wood) starts — clean transition |
 | SA | 21:00–22:00 | **Dolphin Love** (Deep Wood) vs **Blond** (Main Stage 21:20) — catch Dolphin then Blond from 21:20 |
-| SA | 01:00–02:00 | **Daði Freyr** (Forest Stage) vs **Frida Darko** (Deep Wood) vs **bangerfabrique** (?) — triple overlap, hard conflict |
+| SA | 01:00–02:00 | **Daði Freyr** (Forest Stage) vs **Frida Darko** (Deep Wood) vs **bangerfabrique** (Circus Tent) — triple overlap, hard conflict |
 
 > End times estimated (~45 min for live acts, ~60–90 min for DJ/headliner sets). Check the official timetable for exact durations.
 > Genres & summaries sourced from artist bios on appletreegarden.de, MusicBrainz, and Wikipedia.
