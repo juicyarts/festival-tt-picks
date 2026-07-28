@@ -511,66 +511,6 @@
     }
 
     /* ── notifications ── */
-    .notif-input {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .notif-input input {
-      flex: 1;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: var(--card-bg);
-      color: var(--text);
-      font-size: .85rem;
-    }
-
-    .notif-input button {
-      padding: 10px 16px;
-      border: none;
-      border-radius: 10px;
-      background: var(--accent);
-      color: #fff;
-      font-weight: 600;
-      font-size: .85rem;
-      cursor: pointer;
-    }
-
-    .notif-list {
-      list-style: none;
-    }
-
-    .notif-list li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      margin-bottom: 6px;
-      font-size: .85rem;
-    }
-
-    .notif-list li .time {
-      font-size: .68rem;
-      color: var(--text-muted);
-      flex-shrink: 0;
-    }
-
-    .notif-list li .text {
-      flex: 1;
-    }
-
-    .notif-list li .del {
-      border: none;
-      background: none;
-      font-size: 1rem;
-      cursor: pointer;
-      color: var(--text-muted); padding: 4px;
-    }
     .notif-md { margin-bottom: 16px; }
     .notif-md ul { list-style: none; padding: 0; }
     .notif-md li {
@@ -1026,60 +966,11 @@
 
     // ── notifications panel ──
     function buildNotificationsPanel(notifHtml) {
-      return '' +
-        (notifHtml ? '<div class="md notif-md">' + notifHtml + '</div>' : '') +
-        '<div class="notif-input">' +
-        '<input id="notifInput" type="text" placeholder="Add a reminder…">' +
-        '<button id="notifAdd">Add</button>' +
-        '</div>' +
-        '<ul class="notif-list" id="notifList"></ul>';
+      return notifHtml ? '<div class="md notif-md">' + notifHtml + '</div>' : '';
     }
 
     function initNotifications(slug) {
-      const input = document.getElementById('notifInput');
-      if (!input || input.dataset.init) return;
-      input.dataset.init = '1';
-
-      const storageKey = slug + '-notifs';
-      let notifs = [];
-      try {notifs = JSON.parse(localStorage.getItem(storageKey)) || [];} catch (e) { }
-
-      const addBtn = document.getElementById('notifAdd');
-      const list = document.getElementById('notifList');
-
-      function save() {localStorage.setItem(storageKey, JSON.stringify(notifs));}
-
-      function render() {
-        list.innerHTML = '';
-        notifs.forEach((n, i) => {
-          const li = document.createElement('li');
-          const d = new Date(n.ts);
-          li.innerHTML = '' +
-            '<span class="time">' + d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) + '</span>' +
-            '<span class="text">' + esc(n.text) + '</span>' +
-            '<button class="del" data-i="' + i + '">✕</button>';
-          list.appendChild(li);
-        });
-        list.querySelectorAll('.del').forEach(btn => {
-          btn.addEventListener('click', () => {
-            notifs.splice(parseInt(btn.dataset.i), 1);
-            save(); render();
-          });
-        });
-      }
-
-      addBtn.addEventListener('click', () => {
-        const text = input.value.trim();
-        if (!text) return;
-        notifs.unshift({text, ts: Date.now()});
-        save(); render();
-        input.value = '';
-      });
-      input.addEventListener('keydown', e => {
-        if (e.key === 'Enter') addBtn.click();
-      });
-
-      render();
+      // notifications are now fully static from notifications.md
     }
 
     // online/offline

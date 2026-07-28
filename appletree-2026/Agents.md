@@ -80,12 +80,23 @@ Notifications are stored in `notifications.md` alongside `schedule.md`. They are
 - Urgent notification text
 ```
 
-Supported categories (use `##` headings):
-- `## ℹ️ Info` — general information
-- `## ⚠️ Warnings` — things to be careful about
-- `## 🚨 Emergency` or `## 🚨 Awareness` — urgent/awareness info
+### Category Order
 
-Each notification is a markdown list item (`- text`). Links and **bold** are supported.
+Categories must always appear in this order (emergency first):
+1. `## 🚨 Awareness` — always at the top
+2. `## ⚠️ Warnings` — time-sensitive or safety warnings
+3. `## ℹ️ Info` — general information, feature announcements
+
+### Feature Announcements
+
+Every time a new feature is added to the app, add an `## ℹ️ Info` notification explaining:
+- What the feature does
+- How to use it
+
+Keep it short — one list item per feature. Example:
+```markdown
+- **Locations tab**: tap the map to drop markers for your tent (⛺), meeting spot (📍), or yourself (🙂). Long-press a marker to label or remove it
+```
 
 ### Adding Notifications
 
@@ -93,7 +104,8 @@ Notifications are requested via **GitHub Issues** on the repo. To add one:
 
 1. A user opens an issue describing the notification
 2. An agent edits `notifications.md` and adds the entry under the appropriate category
-3. The agent commits and pushes — GitHub Actions redeploys the site automatically
+3. Follow the category order above — emergency always at the top
+4. The agent commits and pushes — GitHub Actions redeploys the site automatically
 
 ### Factual Sources
 
