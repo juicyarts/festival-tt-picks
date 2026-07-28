@@ -655,7 +655,6 @@
         const canvas = document.createElement('canvas');
         const nw = img.naturalWidth || img.width;
         const nh = img.naturalHeight || img.height;
-        // scale down for sharing
         const MAX = 1200;
         const scale = Math.min(1, MAX / Math.max(nw, nh));
         const cw = Math.round(nw * scale);
@@ -677,22 +676,32 @@
             ctx.fillText(m.label, mx, my + fontSize * 1.1);
           }
         });
-        canvas.toBlob(blob => {
-          if (!blob) { toast('Could not generate image'); return; }
-          const file = new File([blob], 'location.png', { type: 'image/png' });
-          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-            navigator.share({ files: [file] }).catch(() => {});
-          } else if (navigator.share) {
-            // fallback: share as URL
-            const url = URL.createObjectURL(blob);
-            navigator.share({ url }).catch(() => {});
-          } else {
+        // use toDataURL to stay within the click gesture
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        const blob = dataURLtoBlob(dataUrl);
+        const file = new File([blob], 'location.jpg', { type: 'image/jpeg' });
+        if (navigator.share) {
+          navigator.share({ files: [file] }).catch(() => {
+            // file share failed, fall back to download
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = 'location.png'; a.click();
-          }
-        }, 'image/png');
+            a.download = 'location.jpg'; a.click();
+          });
+        } else {
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'location.jpg'; a.click();
+        }
       });
+
+      function dataURLtoBlob(dataUrl) {
+        const parts = dataUrl.split(',');
+        const mime = parts[0].match(/:(.*?);/)[1];
+        const bytes = atob(parts[1]);
+        const buf = new Uint8Array(bytes.length);
+        for (let i = 0; i < bytes.length; i++) buf[i] = bytes.charCodeAt(i);
+        return new Blob([buf], { type: mime });
+      }
 
       renderMarkers();
     }
