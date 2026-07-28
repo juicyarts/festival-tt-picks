@@ -418,23 +418,11 @@
       -webkit-user-select: none;
     }
 
-    .map-container a {
-      display: block;
-    }
-
     .map-container img {
       width: 100%;
       display: block;
       user-select: none;
       -webkit-user-select: none;
-    }
-
-    .map-zoom-hint {
-      position: absolute;
-      bottom: 8px; right: 8px;
-      background: rgba(0,0,0,.55); color: #fff;
-      font-size: .68rem; padding: 3px 10px;
-      border-radius: 12px; pointer-events: none;
     }
 
     .map-marker {
@@ -811,11 +799,8 @@
         '<button id="clearMarkers">✕ Clear</button>' +
         '</div>' +
         '<div class="map-container" id="mapContainer">' +
-        '<a href="' + mapSrc + '" target="_blank">' +
         '<img src="' + mapSrc + '" id="mapImg" alt="Festival map">' +
-        '</a>' +
         '<div id="markersLayer"></div>' +
-        '<span class="map-zoom-hint">🔍 Tap to zoom</span>' +
         '</div>' +
         '<div class="map-share-wrap"><button id="shareMap">📤 Share my map</button></div>' +
         '<p class="map-help">Select a type above, then tap the map to place or move it. Tap a marker to select it for moving. Long-press to label or remove.</p>';
@@ -902,7 +887,7 @@
 
       container.addEventListener('click', e => {
         if (!mode) return;
-        if (e.target.closest('.map-marker') || e.target.closest('a')) return;
+        if (e.target.closest('.map-marker')) return;
         const rect = container.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
