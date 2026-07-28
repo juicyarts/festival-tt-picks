@@ -39,9 +39,9 @@
 | [Blond](https://open.spotify.com/artist/4WnfD0e5J91W7zyHBK6svA) | 21:20–22:30 | Große Bühne | — | Indie Pop / Art Pop | Chemnitz trio Nina, Lotta & Johann — "Bling-Bling-Indie" turned into a full pop spectacle, third pilgrimage |
 | [Frida Darko](https://open.spotify.com/artist/5nvhpnFpC7rsQ0mWDNx4bn) | 00:40–02:00 | Tiefes Holz | — | Dark Downtempo / Electronic | Berlin producer — mystic, dark downtempo universe of shimmering energy & hypnotic drops |
 | [Daði Freyr](https://open.spotify.com/artist/3Hb64DQZIhDCgyHKrzBXOL) | 01:00–02:30 | Wald Bühne | + | Electro-Pop / Funktronica / Synth-Pop | Icelandic Eurovision cult icon (2022) — funky, funny & life-affirming electro-pop, even better live |
+| [bangerfabrique](https://www.instagram.com/bangerfabrique/) | 01:00–02:00 | Zirkus Zelt | ++ | German Rap / Collective | Hamburg collective since 2023 — emancipatory rap with crushing basslines, empowering punchlines & feminist edge, live a sweaty mix of performance & club energy |
 | Late Night Jockel Session & Seebo | 02:00–04:00 | Oase | — | Eclectic DJ Set / Disco | Bathrobe on, prosecco in hand — a late-night DJ joyride through decades of fat bass, disco & glorious chaos |
 | [Kataya](https://soundcloud.com/kataya_blossmbae) | 02:50–04:30 | Tiefes Holz | — | Space Disco / House | Back by popular demand after her 2024 Space Disco takeover — sassy grooves, cosmic bounce |
-| [bangerfabrique](https://www.instagram.com/bangerfabrique/) | 01:00–02:00 | Zirkus Zelt | ++ | German Rap / Collective | Hamburg collective since 2023 — emancipatory rap with crushing basslines, empowering punchlines & feminist edge, live a sweaty mix of performance & club energy |
 
 ---
 
