@@ -212,7 +212,7 @@
     }
     .map-marker {
       position: absolute; transform: translate(-50%, -100%);
-      font-size: 1rem; pointer-events: auto; cursor: pointer;
+      font-size: .8rem; pointer-events: auto; cursor: pointer;
       z-index: 2; filter: drop-shadow(0 1px 2px rgba(0,0,0,.4));
     }
     .map-marker .label {
@@ -233,6 +233,7 @@
     }
     .map-toolbar button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
     .map-toolbar button.accent { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .map-help { font-size: .7rem; color: var(--text-muted); margin-top: 8px; }
 
     /* ── notifications ── */
     .notif-input {
@@ -527,7 +528,8 @@
         '<div class="map-container" id="mapContainer">' +
           '<img src="' + mapSrc + '" id="mapImg" alt="Festival map">' +
           '<div id="markersLayer"></div>' +
-        '</div>';
+        '</div>' +
+        '<p class="map-help">Select a type above, then tap the map to place or move it. Tap a marker to select it for moving. Long-press to label or remove.</p>';
     }
 
     function initMap(slug, mapSrc) {
