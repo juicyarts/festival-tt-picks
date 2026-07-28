@@ -205,6 +205,7 @@
       border-radius: 10px; overflow: hidden;
       border: 1px solid var(--border);
       touch-action: manipulation;
+      user-select: none; -webkit-user-select: none;
     }
     .map-container img {
       width: 100%; display: block; pointer-events: none;
@@ -229,11 +230,18 @@
       padding: 6px 12px; border: 1px solid var(--border);
       border-radius: 16px; background: var(--card-bg);
       font-size: .75rem; font-weight: 600; color: var(--text);
-      cursor: pointer;
+      cursor: pointer; user-select: none; -webkit-user-select: none;
     }
     .map-toolbar button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
     .map-toolbar button.accent { background: var(--accent); color: #fff; border-color: var(--accent); }
-    .map-help { font-size: .7rem; color: var(--text-muted); margin-top: 8px; }
+    .map-share-wrap { text-align: center; margin-top: 10px; }
+    .map-share-wrap button {
+      padding: 8px 20px; border: 1px solid var(--border);
+      border-radius: 16px; background: var(--card-bg);
+      font-size: .78rem; font-weight: 600; color: var(--text);
+      cursor: pointer; user-select: none; -webkit-user-select: none;
+    }
+    .map-help { font-size: .7rem; color: var(--text-muted); margin-top: 8px; user-select: none; -webkit-user-select: none; }
 
     /* ── notifications ── */
     .notif-input {
@@ -523,12 +531,12 @@
           '<button data-mode="meet">📍 Meet</button>' +
           '<button data-mode="here">🔵 Here</button>' +
           '<button id="clearMarkers">✕ Clear</button>' +
-          '<button id="shareMap" class="accent">📤 Share</button>' +
         '</div>' +
         '<div class="map-container" id="mapContainer">' +
           '<img src="' + mapSrc + '" id="mapImg" alt="Festival map">' +
           '<div id="markersLayer"></div>' +
         '</div>' +
+        '<div class="map-share-wrap"><button id="shareMap">📤 Share location</button></div>' +
         '<p class="map-help">Select a type above, then tap the map to place or move it. Tap a marker to select it for moving. Long-press to label or remove.</p>';
     }
 
