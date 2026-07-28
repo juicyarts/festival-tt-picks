@@ -6,22 +6,15 @@ Personal festival schedule picks, rendered as a mobile-friendly PWA.
 
 ## View Locally
 
-Any static file server works. Quickest options:
-
 ```bash
-# Python 3 (built-in)
-python3 -m http.server 8080
-
-# Node.js (npx, no install)
-npx serve .
-
-# PHP (built-in)
-php -S localhost:8080
+node server.js
 ```
 
-Open http://localhost:8080 on your phone (same WiFi) or in desktop Chrome's mobile device mode.
+Open **http://localhost:8080** — use Chrome's device toolbar (Cmd+Shift+M) for mobile preview.
 
-For full PWA testing (service worker) use `npx serve .` — `http.server` may not register the SW properly on localhost.
+To test on your phone: connect to the same WiFi, then open `http://<your-mac-lan-ip>:8080` (find your IP with `ipconfig getifaddr en0`).
+
+The service worker registers correctly on localhost, so offline mode works in local dev too.
 
 ## Add a Festival
 
