@@ -274,7 +274,7 @@
       html = html.replace(/((?:^\|.+\|$\n?)+)/gm, (match) => {
         const lines = match.trim().split('\n');
         // check for separator line
-        let hasHeader = lines.length > 1 && /^\|[\s:-]+\|$/.test(lines[1]);
+        let hasHeader = lines.length > 1 && /^\|(\s*:?-+:?\s*\|)+$/.test(lines[1]);
         let headerCells = [];
         let bodyStart = 0;
 
