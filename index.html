@@ -126,12 +126,12 @@
 
     /* card-style rows on narrow screens */
     @media (max-width: 520px) {
-      .md .table-wrap { margin: 8px -16px; padding: 0; overflow-x: visible; }
+      .md .table-wrap { margin: 8px 0; padding: 0; overflow-x: visible; }
       .md table, .md thead, .md tbody, .md th, .md tr, .md td { display: block; }
       .md thead { display: none; }
       .md tr {
         background: var(--card-bg); border: 1px solid var(--border);
-        border-radius: 10px; margin-bottom: 8px; padding: 10px 14px;
+        border-radius: 10px; margin-bottom: 10px; padding: 10px 14px;
         box-shadow: var(--shadow);
       }
       .md td {
@@ -150,11 +150,13 @@
 
       /* summary column — collapsible */
       .md td.summary-cell .summary-text {
-        display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+        display: block;
+        max-height: 2.7em;
         overflow: hidden;
       }
       .md td.summary-cell.expanded .summary-text {
-        display: block; -webkit-line-clamp: unset; overflow: visible;
+        max-height: none;
+        overflow: visible;
       }
       .md td.summary-cell .summary-toggle {
         display: inline-block; font-size: .7rem; font-weight: 600;
