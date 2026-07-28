@@ -44,6 +44,7 @@ Each table row follows this structure:
   - `Wald Bühne` → `Forest Stage`
   - `Zirkus Zelt` → `Circus Tent`
   - `Oase` → `Oasis`
+  - `?` = unknown (check timetable)
   - `Glitzer Salon` → `Glitter Salon`
 - **Rating**:
   - `++` = don't miss
@@ -69,6 +70,6 @@ The schedule is rendered by `index.html` via:
 
 ## Notes
 
-- **bangerfabrique** is listed on the festival site (Hamburg German rap collective) but their exact day/time/stage could not be extracted from the image-based timetable. Needs manual lookup.
-- Festival dates for 2026: July 23–25 (Thursday–Saturday).
+- **bangerfabrique**: Hamburg German rap collective, Saturday night 01:00–02:00. Stage TBD.
+- Festival dates for 2026: July 30 – August 1 (Thursday–Saturday).
 - The festival takes a break year in 2027 (25th anniversary in 2026).

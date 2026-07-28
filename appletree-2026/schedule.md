@@ -1,8 +1,8 @@
 # Appletree Garden 2026 — My Picks
 
-> July 23–25, 2026 &nbsp;|&nbsp; **++** don't miss &nbsp;|&nbsp; **+** priority
+> July 30 – Aug 1, 2026 &nbsp;|&nbsp; **++** don't miss &nbsp;|&nbsp; **+** priority
 
-## Thursday (July 23)
+## Thursday (July 30)
 
 | Artist | Time | Stage | Rating | Genre | Summary |
 |---|---|---|---|---|---|
@@ -14,7 +14,7 @@
 | [Disarstar](https://open.spotify.com/artist/7BSNHln0lSqyDHdQ3sv0Q5) | 23:40–00:25 | Main Stage | — | German Political Rap | Hamburg rapper — structural inequality, capitalism critique & class struggle over hard-hitting beats |
 | [Susi&Paula](https://open.spotify.com/artist/2PbovIOe3ext7TEvM2WrDD) | 00:40–02:00 | Deep Wood | — | Tech House / Indie Dance | Queer DJ & producer duo from Hamburg — cheeky tech house meets bounce-fueled indie dance |
 
-## Friday (July 24)
+## Friday (July 31)
 
 | Artist | Time | Stage | Rating | Genre | Summary |
 |---|---|---|---|---|---|
@@ -29,7 +29,7 @@
 | [SALÒ](https://open.spotify.com/artist/49uauFOxmzTD83IUpZPdLz) | 22:30–23:15 | Circus Tent | + | Pop-Punk / Indie | Vienna's "Anarcho-Pop-Punk-Poet" Andreas Binder — loud, uncomfortable & damn danceable |
 | [Shkoon](https://open.spotify.com/artist/3CdsJ9u53uPu3dScKypLVv) | 01:00–02:00 | Forest Stage | — | Arabic Folklore × Electronic | Hamburg duo Ameen & Thorben — a decade of fusing Arabic tradition with electronic music |
 
-## Saturday (July 25)
+## Saturday (Aug 1)
 
 | Artist | Time | Stage | Rating | Genre | Summary |
 |---|---|---|---|---|---|
@@ -41,6 +41,7 @@
 | [Daði Freyr](https://open.spotify.com/artist/3Hb64DQZIhDCgyHKrzBXOL) | 01:00–02:30 | Forest Stage | + | Electro-Pop / Funktronica / Synth-Pop | Icelandic Eurovision cult icon (2022) — funky, funny & life-affirming electro-pop, even better live |
 | Late Night Jockel Session & Seebo | 02:00–04:00 | Oasis | — | Eclectic DJ Set / Disco | Bathrobe on, prosecco in hand — a late-night DJ joyride through decades of fat bass, disco & glorious chaos |
 | [Kataya](https://soundcloud.com/kataya_blossmbae) | 02:50–04:30 | Deep Wood | — | Space Disco / House | Back by popular demand after her 2024 Space Disco takeover — sassy grooves, cosmic bounce |
+| [bangerfabrique](https://www.instagram.com/bangerfabrique/) | 01:00–02:00 | ? | ++ | German Rap / Collective | Hamburg collective since 2023 — emancipatory rap with crushing basslines, empowering punchlines & feminist edge, live a sweaty mix of performance & club energy |
 
 ---
 
@@ -52,7 +53,7 @@
 | TH | 21:10–22:20 | **Sébastien Tellier** (Main Stage) vs **World Brain** (Oasis) — partial, catch Tellier's first 50 min then switch |
 | TH | 23:40–00:25 | **Disarstar** (Main Stage) ends 15 min before **Susi&Paula** (Deep Wood) starts — clean transition |
 | SA | 21:00–22:00 | **Dolphin Love** (Deep Wood) vs **Blond** (Main Stage 21:20) — catch Dolphin then Blond from 21:20 |
-| SA | 01:00–02:00 | **Daði Freyr** (Forest Stage) vs **Frida Darko** (Deep Wood) — full overlap, hard conflict |
+| SA | 01:00–02:00 | **Daði Freyr** (Forest Stage) vs **Frida Darko** (Deep Wood) vs **bangerfabrique** (?) — triple overlap, hard conflict |
 
 > End times estimated (~45 min for live acts, ~60–90 min for DJ/headliner sets). Check the official timetable for exact durations.
 > Genres & summaries sourced from artist bios on appletreegarden.de, MusicBrainz, and Wikipedia.
