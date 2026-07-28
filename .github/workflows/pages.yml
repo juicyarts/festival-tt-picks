@@ -23,18 +23,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Copy markdown files into site
+      - name: Copy site files
         run: |
           mkdir -p _site
-          cp index.html _site/
-          cp sw.js _site/
-          cp manifest.json _site/
-          cp pages.json _site/
-          # copy all markdown directories, preserving structure
-          find . -name '*.md' -not -path './.git/*' | while read f; do
-            dest="_site/$(dirname "$f" | sed 's|^\./||')"
-            mkdir -p "$dest"
-            cp "$f" "$dest/"
+          # copy root files
+          cp index.html sw.js manifest.json pages.json _site/
+          # copy all content directories (markdown + assets), preserving structure
+          find . -not -path './.git/*' -not -path './_site/*' -not -path './.github/*' -not -path './.gitignore' -not -name '.DS_Store' -type f | while read f; do
+            dest="_site/$(echo "$f" | sed 's|^\./||')"
+            mkdir -p "$(dirname "$dest")"
+            cp "$f" "$dest"
           done
 
       - name: Setup Pages
