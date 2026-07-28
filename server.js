@@ -38,7 +38,7 @@ http.createServer((req, res) => {
     }
   });
 }).listen(PORT, () => {
-  console.log(`  🎵 Festival Picks → http://localhost:${PORT}`);
+  console.log(`  ✊ Achja?! → http://localhost:${PORT}`);
   console.log(`  📱 On your phone: http://<your-lan-ip>:${PORT}`);
   console.log(`  ✴  Ctrl+C to stop`);
 });

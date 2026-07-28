@@ -1,4 +1,4 @@
-# Festival TT Picks
+# Achja?!
 
 Personal festival schedule picks, rendered as a mobile-friendly PWA.
 
