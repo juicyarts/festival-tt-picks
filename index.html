@@ -429,6 +429,8 @@
       return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
 
+    let activeTab = null;
+
     // ── load & render a page ──
     async function loadPage(slug) {
       const page = pages.find(p => p.slug === slug);
@@ -446,20 +448,21 @@
         const md = await res.text();
         const html = md2html(md);
 
+        const defaultTab = activeTab || 'artists';
         $content.innerHTML =
           '<nav class="tab-bar">' +
-            '<button class="tab active" data-tab="artists">Artists</button>' +
-            '<button class="tab" data-tab="locations">Locations</button>' +
-            '<button class="tab" data-tab="notifications">Notifications</button>' +
+            '<button class="tab' + (defaultTab === 'artists' ? ' active' : '') + '" data-tab="artists">Artists</button>' +
+            '<button class="tab' + (defaultTab === 'locations' ? ' active' : '') + '" data-tab="locations">Locations</button>' +
+            '<button class="tab' + (defaultTab === 'notifications' ? ' active' : '') + '" data-tab="notifications">Notifications</button>' +
           '</nav>' +
-          '<div class="tab-panel tab-artists active"><div class="md">' + html + '</div></div>' +
-          '<div class="tab-panel tab-locations">' + buildLocationsPanel(page) + '</div>' +
-          '<div class="tab-panel tab-notifications">' + buildNotificationsPanel() + '</div>';
+          '<div class="tab-panel tab-artists' + (defaultTab === 'artists' ? ' active' : '') + '"><div class="md">' + html + '</div></div>' +
+          '<div class="tab-panel tab-locations' + (defaultTab === 'locations' ? ' active' : '') + '">' + buildLocationsPanel(page) + '</div>' +
+          '<div class="tab-panel tab-notifications' + (defaultTab === 'notifications' ? ' active' : '') + '">' + buildNotificationsPanel() + '</div>';
 
         wireTabs(slug);
         if (page.map) initMap(slug, page.map);
         initNotifications(slug);
-        scrollToNow();
+        if (defaultTab === 'artists') scrollToNow();
       } catch(e) {
         $content.innerHTML = '<p style="color:var(--text-muted)">Failed to load page. Check your connection.</p>';
       }
@@ -475,14 +478,15 @@
 
     // ── routing ──
     function route() {
-      const hash = window.location.hash.replace('#', '');
-      if (hash && pages.length > 0) {
-        loadPage(hash);
-      } else if (hash && pages.length === 0) {
-        // pages not loaded yet, retry
-        loadIndex().then(() => { if (window.location.hash) route(); });
+      const raw = window.location.hash.replace('#', '');
+      if (!raw && pages.length > 0) return showListing();
+      if (!raw) return;
+      const [slug, tab] = raw.split(':');
+      activeTab = tab || null;
+      if (pages.length > 0) {
+        loadPage(slug);
       } else {
-        showListing();
+        loadIndex().then(() => { if (window.location.hash) route(); });
       }
     }
 
@@ -512,12 +516,17 @@
       const panels = document.querySelectorAll('.tab-panel');
       tabs.forEach(btn => {
         btn.addEventListener('click', () => {
+          const t = btn.dataset.tab;
+          // update hash without triggering route
+          const newHash = '#' + slug + (t === 'artists' ? '' : ':' + t);
+          if (window.location.hash !== newHash) {
+            history.replaceState(null, '', newHash);
+          }
           tabs.forEach(b => b.classList.remove('active'));
           panels.forEach(p => p.classList.remove('active'));
           btn.classList.add('active');
-          document.querySelector('.tab-' + btn.dataset.tab).classList.add('active');
-          // re-scroll if artists tab selected
-          if (btn.dataset.tab === 'artists') scrollToNow();
+          document.querySelector('.tab-' + t).classList.add('active');
+          if (t === 'artists') scrollToNow();
         });
       });
     }
@@ -699,11 +708,14 @@
     }
 
     function initNotifications(slug) {
+      const input = document.getElementById('notifInput');
+      if (!input || input.dataset.init) return;
+      input.dataset.init = '1';
+
       const storageKey = slug + '-notifs';
       let notifs = [];
       try { notifs = JSON.parse(localStorage.getItem(storageKey)) || []; } catch(e) {}
 
-      const input = document.getElementById('notifInput');
       const addBtn = document.getElementById('notifAdd');
       const list = document.getElementById('notifList');
 
