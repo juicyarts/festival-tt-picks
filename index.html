@@ -929,8 +929,16 @@
           ctx.fillText(EMOJI[m.type] || '📍', mx, my);
           if (m.label) {
             ctx.font = labelSize + 'px sans-serif';
-            ctx.fillStyle = '#000';
-            ctx.fillText(m.label, mx, my + fontSize * 1.1);
+            const metrics = ctx.measureText(m.label);
+            const tw = metrics.width;
+            const th = labelSize * 1.4;
+            const tx = mx - tw / 2 - labelSize * 0.4;
+            const ty = my + fontSize * 0.6;
+            ctx.fillStyle = 'rgba(255,255,255,0.85)';
+            roundRect(ctx, tx, ty, tw + labelSize * 0.8, th, labelSize * 0.3);
+            ctx.fill();
+            ctx.fillStyle = '#111';
+            ctx.fillText(m.label, mx, ty + labelSize);
           }
         });
         // use toDataURL to stay within the click gesture
@@ -950,6 +958,20 @@
           a.download = 'location.jpg'; a.click();
         }
       });
+
+      function roundRect(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        ctx.lineTo(x + r, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+      }
 
       function dataURLtoBlob(dataUrl) {
         const parts = dataUrl.split(',');
