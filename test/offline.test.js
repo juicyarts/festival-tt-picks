@@ -6,11 +6,13 @@
 const { chromium } = require('playwright');
 const { spawn } = require('child_process');
 const http = require('http');
+const fs = require('fs');
 const path = require('path');
 
 const PORT = 8765;
 const BASE = `http://localhost:${PORT}`;
 const ROOT = path.resolve(__dirname, '..');
+const expectedNotifCount = (fs.readFileSync(path.join(ROOT, 'appletree-2026', 'notifications.md'), 'utf8').match(/^\s*-\s+/gm) || []).length;
 
 let server;
 let browser;
@@ -153,11 +155,23 @@ async function run() {
   else fail('Locations tab shows map');
 
   // ── TEST 6: Notifications tab ──
+  const notifBadge = await getText('[data-tab="notifications"] .tab-badge');
+  if (notifBadge === String(expectedNotifCount)) ok('Notifications tab shows unread count badge');
+  else fail('Notifications tab shows unread count badge', 'badge was: ' + notifBadge);
+
   await page.click('[data-tab="notifications"]');
   await page.waitForTimeout(500);
   const notifContent = await isVisible('.notif-md');
   if (notifContent) ok('Notifications tab shows content');
   else fail('Notifications tab shows content');
+
+  const swimReminder = await getText('.tab-panel.tab-notifications');
+  if (swimReminder.includes('shuttle bus') && swimReminder.includes('sun cream')) ok('Notifications include swimming reminder');
+  else fail('Notifications include swimming reminder');
+
+  const notifBadgeCleared = await page.evaluate(() => !document.querySelector('[data-tab="notifications"] .tab-badge'));
+  if (notifBadgeCleared) ok('Notifications badge clears after opening tab');
+  else fail('Notifications badge clears after opening tab');
 
   // ── TEST 7: Back to listing ──
   await page.click('#backBtn');
