@@ -88,6 +88,22 @@ Always verify against the official festival website. For each festival, document
 3. Emergency/warnings always stay above info blocks
 4. Commit & push → GitHub Actions redeploys
 
+## Scripts
+
+Utility scripts live in `scripts/`.
+
+| Script | Usage |
+|---|---|
+| `screenshot-map.js` | Generate a supermarket overview map for a festival. Requires Playwright. Edit coordinates inside the script, then run: `node scripts/screenshot-map.js`. Outputs to `{slug}/assets/supermarket-map.png`. |
+| `compress-assets.sh` | Batch-compress all PNGs in a festival's assets folder for smaller offline downloads. Requires ImageMagick. Run: `./scripts/compress-assets.sh appletree-2026` |
+
+## Tests
+
+| Script | Usage |
+|---|---|
+| `test/offline.test.js` | Run PWA offline tests against local server: `npm test` |
+| `test/deployed.test.js` | Run PWA tests against deployed URL: `BASE_URL=https://juicyarts.de/festival-tt-picks node test/deployed.test.js` |
+
 ## Code Generalization
 
 When adding new festivals, prefer adding data over adding code:
