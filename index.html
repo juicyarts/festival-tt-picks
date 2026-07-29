@@ -518,6 +518,15 @@
     }
     .supermarket-note { font-size: .7rem; color: var(--text-muted); margin-top: 6px; }
 
+    /* ── timetable ── */
+    .timetable-section { margin-top: 24px; }
+    .timetable-section h3 { font-size: .85rem; margin-bottom: 8px; }
+    .timetable-img {
+      width: 100%; border-radius: 10px;
+      border: 1px solid var(--border); display: block;
+    }
+    .timetable-note { font-size: .7rem; color: var(--text-muted); margin-top: 6px; }
+
     /* ── notifications ── */
     .notif-md { margin-bottom: 16px; }
     .notif-md ul { list-style: none; padding: 0; }
@@ -721,7 +730,16 @@
           '<button class="tab' + (defaultTab === 'locations' ? ' active' : '') + '" data-tab="locations">Locations</button>' +
           '<button class="tab' + (defaultTab === 'notifications' ? ' active' : '') + '" data-tab="notifications">Notifications</button>' +
           '</nav>' +
-          '<div class="tab-panel tab-artists' + (defaultTab === 'artists' ? ' active' : '') + '"><div class="md">' + html + '</div></div>' +
+          '<div class="tab-panel tab-artists' + (defaultTab === 'artists' ? ' active' : '') + '">' +
+            '<div class="md">' + html + '</div>' +
+            '<div class="timetable-section">' +
+              '<h3>📋 Official Timetable</h3>' +
+              '<a href="appletree-2026/assets/timetable.png" target="_blank">' +
+                '<img class="timetable-img" src="appletree-2026/assets/timetable.png" alt="Official timetable">' +
+              '</a>' +
+              '<p class="timetable-note">Tap to enlarge — official timetable from appletreegarden.de</p>' +
+            '</div>' +
+          '</div>' +
           '<div class="tab-panel tab-locations' + (defaultTab === 'locations' ? ' active' : '') + '">' + buildLocationsPanel(page) + '</div>' +
           '<div class="tab-panel tab-notifications' + (defaultTab === 'notifications' ? ' active' : '') + '">' + buildNotificationsPanel(notifHtml) + '</div>';
 
