@@ -7,9 +7,9 @@ const FESTIVAL = { lat: 52.60528, lon: 8.38817, name: 'Festival' };
 
 // nearest supermarkets, sorted by proximity
 const MARKETS = [
+  { name: 'famila', lat: 52.60595, lon: 8.38344, addr: 'Groweg 50' },
   { name: 'Netto', lat: 52.60728, lon: 8.37954, addr: 'Grafenstraße 23' },
   { name: 'ALDI', lat: 52.60815, lon: 8.36658, addr: 'Mollerstraße 20' },
-  { name: 'Combi', lat: 52.60653, lon: 8.36606, addr: 'Flöthestraße 43' },
 ];
 
 // center between festival and closest market (ALDI)
