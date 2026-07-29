@@ -824,8 +824,8 @@
           if (!range) return;
 
           // A lower start time than the previous row means the schedule rolled past midnight.
-          // This assumes each day's rows stay in chronological order; non-chronological or
-          // parallel-stage schedules would need explicit date metadata instead.
+          // This assumes each day's rows stay in chronological order; otherwise later rows
+          // could be shifted onto the wrong day and show incorrect playing/played badges.
           if (previousStartMinutes !== null && range.startMinutes < previousStartMinutes) {
             currentDayOffset += 1;
           }
