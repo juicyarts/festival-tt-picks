@@ -11,11 +11,7 @@ if (!slug) { console.error('Usage: node scripts/screenshot-lageplan.js <festival
 const FESTIVALS = {
   'hoflaerm-2026': {
     lat: 50.7430, lon: 7.6970, name: 'Hoflärm Open Air',
-    zoom: 16, radius: 300,
-  },
-  'appletree-2026': {
-    lat: 52.60528, lon: 8.38817, name: 'Appletree Garden',
-    zoom: 16, radius: 300,
+    zoom: 17, radius: 200,
   },
 };
 
@@ -42,12 +38,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // festival marker
-L.marker([${cfg.lat}, ${cfg.lon}])
-  .bindPopup('🎪 ${cfg.name}')
-  .addTo(map)
-  .openPopup();
-
-// radius circle
+// subtle radius circle — no marker, users place their own
 L.circle([${cfg.lat}, ${cfg.lon}], {
   radius: ${cfg.radius},
   color: '#e94560',
