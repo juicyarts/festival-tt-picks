@@ -155,7 +155,7 @@ async function run() {
   // ── TEST 6: Notifications tab ──
   const expectedNotifCount = await page.evaluate(async () => {
     const res = await fetch('appletree-2026/notifications.md');
-    return countNotifications(await res.text());
+    return window.countNotifications(await res.text());
   });
   const notifBadgeVisible = await isVisible('[data-tab="notifications"] .tab-badge');
   if (notifBadgeVisible) ok('Notifications tab renders unread count badge');
@@ -172,7 +172,7 @@ async function run() {
   else fail('Notifications tab shows content');
 
   const swimReminder = await getText('.tab-panel.tab-notifications');
-  if (swimReminder.includes('shuttle bus') && swimReminder.includes('sunscreen')) ok('Notifications include swimming reminder');
+  if (swimReminder.includes('shuttle bus') && swimReminder.includes('sunscreen') && swimReminder.includes('coat')) ok('Notifications include swimming reminder');
   else fail('Notifications include swimming reminder');
 
   const notifBadgeCleared = await page.evaluate(() => !document.querySelector('[data-tab="notifications"] .tab-badge'));
