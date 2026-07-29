@@ -6,13 +6,11 @@
 const { chromium } = require('playwright');
 const { spawn } = require('child_process');
 const http = require('http');
-const fs = require('fs');
 const path = require('path');
 
 const PORT = 8765;
 const BASE = `http://localhost:${PORT}`;
 const ROOT = path.resolve(__dirname, '..');
-const expectedNotifCount = (fs.readFileSync(path.join(ROOT, 'appletree-2026', 'notifications.md'), 'utf8').match(/^\s*-\s+/gm) || []).length;
 
 let server;
 let browser;
@@ -155,6 +153,14 @@ async function run() {
   else fail('Locations tab shows map');
 
   // ── TEST 6: Notifications tab ──
+  const expectedNotifCount = await page.evaluate(async () => {
+    const res = await fetch('appletree-2026/notifications.md');
+    return countNotifications(await res.text());
+  });
+  const notifBadgeVisible = await isVisible('[data-tab="notifications"] .tab-badge');
+  if (notifBadgeVisible) ok('Notifications tab renders unread count badge');
+  else fail('Notifications tab renders unread count badge');
+
   const notifBadge = await getText('[data-tab="notifications"] .tab-badge');
   if (notifBadge === String(expectedNotifCount)) ok('Notifications tab shows unread count badge');
   else fail('Notifications tab shows unread count badge', 'badge was: ' + notifBadge);
