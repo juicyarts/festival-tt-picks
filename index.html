@@ -252,6 +252,8 @@
       border-bottom: none;
     }
 
+    .md tr.priority { background: var(--accent-soft); }
+
     .md tr.artist-playing td {
       background: var(--accent-soft);
     }
@@ -298,6 +300,7 @@
         padding: 10px 14px;
         box-shadow: var(--shadow);
       }
+      .md tr.priority { border-color: var(--accent); border-width: 1.5px; background: var(--accent-soft); }
 
       .md td {
         border: none;
@@ -968,6 +971,10 @@
         if (locEl && locHtml) locEl.innerHTML = locHtml;
         initNotifications(slug, notifCount, defaultTab);
         startArtistActivityUpdates();
+        // highlight priority picks
+        document.querySelectorAll('.md td[data-label="Rating"]').forEach(td => {
+          if (td.textContent.trim() === '+' || td.textContent.trim() === '++') td.parentElement.classList.add('priority');
+        });
         if (defaultTab === 'artists') scrollToNow();
       } catch (e) {
         activeFestivalYear = null;
