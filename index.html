@@ -717,6 +717,7 @@
     }
 
     function countNotifications(md) {
+      // Count markdown bullet items that start with optional whitespace, a dash, and a space.
       return (md.match(/^\s*-\s+/gm) || []).length;
     }
 
@@ -746,7 +747,7 @@
         btn.appendChild(badge);
       }
       badge.textContent = String(unreadCount);
-      badge.setAttribute('aria-label', unreadCount + ' unread notifications');
+      badge.setAttribute('aria-label', unreadCount + ' unread notification' + (unreadCount === 1 ? '' : 's'));
     }
 
     function markNotificationsSeen(slug, notificationCount) {

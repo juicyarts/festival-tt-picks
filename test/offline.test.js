@@ -11,6 +11,7 @@ const path = require('path');
 const PORT = 8765;
 const BASE = `http://localhost:${PORT}`;
 const ROOT = path.resolve(__dirname, '..');
+const FESTIVAL_SLUG = 'appletree-2026';
 
 let server;
 let browser;
@@ -153,10 +154,10 @@ async function run() {
   else fail('Locations tab shows map');
 
   // ── TEST 6: Notifications tab ──
-  const expectedNotifCount = await page.evaluate(async () => {
-    const res = await fetch('appletree-2026/notifications.md');
+  const expectedNotifCount = await page.evaluate(async festivalSlug => {
+    const res = await fetch(festivalSlug + '/notifications.md');
     return window.countNotifications(await res.text());
-  });
+  }, FESTIVAL_SLUG);
   const notifBadgeVisible = await isVisible('[data-tab="notifications"] .tab-badge');
   if (notifBadgeVisible) ok('Notifications tab renders unread count badge');
   else fail('Notifications tab renders unread count badge');
@@ -172,7 +173,7 @@ async function run() {
   else fail('Notifications tab shows content');
 
   const swimReminder = await getText('.tab-panel.tab-notifications');
-  if (swimReminder.includes('shuttle bus') && swimReminder.includes('sunscreen') && swimReminder.includes('coat')) ok('Notifications include swimming reminder');
+  if (['shuttle bus', 'sunscreen', 'coat'].every(term => swimReminder.includes(term))) ok('Notifications include swimming reminder');
   else fail('Notifications include swimming reminder');
 
   const notifBadgeCleared = await page.evaluate(() => !document.querySelector('[data-tab="notifications"] .tab-badge'));
@@ -188,7 +189,7 @@ async function run() {
 
   // ── TEST 8: Assets cached ──
   console.log('\n── Cache tests ──');
-  await visit('/#appletree-2026');
+  await visit('/#' + FESTIVAL_SLUG);
   await page.waitForSelector('.tab-bar', { timeout: 5000 });
   await page.click('[data-tab="locations"]');
   await page.waitForTimeout(1000);
@@ -216,7 +217,7 @@ async function run() {
   else fail('Listing page loads offline', 'got: ' + offlineTitle);
 
   // ── TEST 10: Offline — schedule page ──
-  await visit('/#appletree-2026');
+  await visit('/#' + FESTIVAL_SLUG);
   const offlineH2 = await getText('.md h2');
   if (offlineH2 && offlineH2.length > 0) ok('Schedule loads offline');
   else fail('Schedule loads offline');
@@ -237,7 +238,7 @@ async function run() {
 
   // ── TEST 13: URL hash tab persistence ──
   await goOnline();
-  await visit('/#appletree-2026:locations');
+  await visit('/#' + FESTIVAL_SLUG + ':locations');
   await page.waitForSelector('.tab-bar', { timeout: 5000 });
   await page.waitForTimeout(500);
   const locActive = await page.evaluate(() =>
