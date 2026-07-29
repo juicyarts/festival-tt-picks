@@ -166,7 +166,7 @@ async function run() {
   else fail('Notifications tab shows content');
 
   const swimReminder = await getText('.tab-panel.tab-notifications');
-  if (swimReminder.includes('shuttle bus') && swimReminder.includes('sun cream')) ok('Notifications include swimming reminder');
+  if (swimReminder.includes('shuttle bus') && swimReminder.includes('sunscreen')) ok('Notifications include swimming reminder');
   else fail('Notifications include swimming reminder');
 
   const notifBadgeCleared = await page.evaluate(() => !document.querySelector('[data-tab="notifications"] .tab-badge'));

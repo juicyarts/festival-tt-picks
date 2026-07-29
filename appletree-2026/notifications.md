@@ -10,6 +10,6 @@
 - **Locations tab**: tap the map to drop markers for your tent (⛺), meeting spot (📍), or yourself (🙂). Long-press a marker to label or remove it — long-press the **me** marker to set your own emoji or custom text. Use **Share my map** to send your marked map to friends via any messenger
 - **Artists tab**: curated schedule picks sorted by day and time. The page auto-scrolls to the current festival day. Tap any artist for their Spotify link
 - **Notifications tab**: festival announcements and awareness info live here.
-- Fancy a swim? There’s a **shuttle bus** for it, so bring your swimming stuff, think about **sun cream**, and pack a **coat** too in case the weather turns rainy
+- Fancy a swim? There’s a **shuttle bus** for it, so bring your swimming stuff, think about **sunscreen**, and pack a **coat** too in case the weather turns rainy
 - **Offline ready**: after your first visit the entire app works without internet. Add it to your home screen from Safari/Chrome for quick access
 - **Privacy**: this app does not save any user-specific data outside of your phone. Markers and settings are stored locally on your device only — nothing is uploaded or shared
