@@ -6,6 +6,10 @@
 
 ## ℹ️ Info
 
+- This year, you can also get chilled sparkling wine for 10 per bottle at the “Perle,” right next to the campground ✨
+
+## ℹ️ Info
+
 - Fancy a swim? There’s a **shuttle bus** for it, so bring your swimming stuff, think about **sunscreen**, and pack a **coat** too in case the weather turns rainy
 
 ## ℹ️ Info
