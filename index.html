@@ -252,6 +252,22 @@
       border-bottom: none;
     }
 
+    .md tr.artist-playing td {
+      background: var(--accent-soft);
+    }
+
+    .md tr.artist-playing td:first-child {
+      border-left: 3px solid var(--accent);
+    }
+
+    .md tr.artist-played {
+      opacity: .55;
+    }
+
+    .md tr.artist-played a {
+      color: var(--text-muted);
+    }
+
     /* card-style rows on narrow screens */
     @media (max-width: 520px) {
       .md .table-wrap {
@@ -575,6 +591,12 @@
 
     let pages = [];
     let isOnline = navigator.onLine;
+    let activeFestivalYear = null;
+    let artistActivityTimer = null;
+    // Festival data in this app is expected to be current-era schedule content.
+    const MIN_FESTIVAL_YEAR = 2000;
+    const MAX_FESTIVAL_YEAR = 2099;
+    const ACTIVITY_UPDATE_INTERVAL_MS = 60000;
 
     // ── toast ──
     function toast(msg, ms = 2000) {
@@ -710,6 +732,123 @@
       return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
+    function parseFestivalYear(text) {
+      const match = (text || '').match(/\b(\d{4})\b/);
+      return match ? Number(match[1]) : null;
+    }
+
+    function isValidFestivalYear(year) {
+      return Number.isInteger(year) && year >= MIN_FESTIVAL_YEAR && year <= MAX_FESTIVAL_YEAR;
+    }
+
+    function parseScheduleDay(text, year) {
+      if (!isValidFestivalYear(year)) return null;
+      const monthMap = {
+        january: 0, jan: 0,
+        february: 1, feb: 1,
+        march: 2, mar: 2,
+        april: 3, apr: 3,
+        may: 4,
+        june: 5, jun: 5,
+        july: 6, jul: 6,
+        august: 7, aug: 7,
+        september: 8, sep: 8, sept: 8,
+        october: 9, oct: 9,
+        november: 10, nov: 10,
+        december: 11, dec: 11
+      };
+      const headingText = text || '';
+      const parenMatch = headingText.match(/\(([^)]+)\)/);
+      const source = parenMatch ? parenMatch[1] : headingText;
+      const match = source.replace(',', '').match(/([A-Za-z]+)\s+(\d{1,2})/);
+      if (!match) return null;
+      const month = monthMap[match[1].toLowerCase()];
+      if (month === undefined) return null;
+      return new Date(year, month, Number(match[2]));
+    }
+
+    function parseTimeRange(text) {
+      // Accept both en dashes from markdown content and plain hyphens from fallbacks/manual edits.
+      // Single-digit hours are allowed so manually edited schedules like 9:30-10:15 still parse.
+      const match = (text || '').trim().match(/^(\d{1,2}):(\d{2})\s*[–-]\s*(\d{1,2}):(\d{2})$/);
+      if (!match) return null;
+      const startHours = Number(match[1]);
+      const startMinutes = Number(match[2]);
+      const endHours = Number(match[3]);
+      const endMinutes = Number(match[4]);
+      if (
+        startHours > 23 || endHours > 23 ||
+        startMinutes > 59 || endMinutes > 59
+      ) return null;
+      return {
+        startMinutes: startHours * 60 + startMinutes,
+        endMinutes: endHours * 60 + endMinutes
+      };
+    }
+
+    function buildDateTime(baseDate, minutes, dayOffset) {
+      return new Date(
+        baseDate.getFullYear(),
+        baseDate.getMonth(),
+        baseDate.getDate() + dayOffset,
+        Math.floor(minutes / 60),
+        minutes % 60
+      );
+    }
+
+    function setArtistActivityState(row, state) {
+      row.classList.remove('artist-playing', 'artist-played');
+      row.dataset.activityState = state || '';
+      if (state) row.classList.add('artist-' + state);
+    }
+
+    function updateArtistActivityIndicators() {
+      const rows = document.querySelectorAll('.md tbody tr');
+      rows.forEach(row => setArtistActivityState(row, ''));
+      if (!activeFestivalYear) return;
+
+      const now = new Date();
+      const headings = document.querySelectorAll('.md h2');
+
+      headings.forEach(heading => {
+        const baseDate = parseScheduleDay(heading.textContent, activeFestivalYear);
+        const tableWrap = heading.nextElementSibling;
+        if (!baseDate || !tableWrap || !tableWrap.classList.contains('table-wrap')) return;
+
+        let currentDayOffset = 0;
+        let previousStartMinutes = null;
+
+        tableWrap.querySelectorAll('tbody tr').forEach(row => {
+          const timeCell = row.querySelector('td[data-label="Time"]');
+          const range = parseTimeRange(timeCell && timeCell.textContent);
+          if (!range) return;
+
+          // A lower start time than the previous row means the schedule rolled past midnight.
+          // This assumes each day's table stays in chronological order, including late-night sets.
+          if (previousStartMinutes !== null && range.startMinutes < previousStartMinutes) {
+            currentDayOffset += 1;
+          }
+          previousStartMinutes = range.startMinutes;
+
+          const start = buildDateTime(baseDate, range.startMinutes, currentDayOffset);
+          const endOffset = currentDayOffset + (range.endMinutes < range.startMinutes ? 1 : 0);
+          const end = buildDateTime(baseDate, range.endMinutes, endOffset);
+
+          if (now >= end) {
+            setArtistActivityState(row, 'played');
+          } else if (now >= start && now < end) {
+            setArtistActivityState(row, 'playing');
+          }
+        });
+      });
+    }
+
+    function startArtistActivityUpdates() {
+      clearInterval(artistActivityTimer);
+      updateArtistActivityIndicators();
+      artistActivityTimer = setInterval(updateArtistActivityIndicators, ACTIVITY_UPDATE_INTERVAL_MS);
+    }
+
     let activeTab = null;
 
     function getNotificationStorageKey(slug) {
@@ -772,6 +911,7 @@
         if (!res.ok) throw new Error('Not found');
         const md = await res.text();
         const html = md2html(md);
+        activeFestivalYear = parseFestivalYear(page.title) || parseFestivalYear(md);
 
         // try loading notifications.md
         let notifMd = '';
@@ -810,13 +950,18 @@
         wireTabs(slug, notifCount);
         if (page.map) initMap(slug, page.map);
         initNotifications(slug, notifCount, defaultTab);
+        startArtistActivityUpdates();
         if (defaultTab === 'artists') scrollToNow();
       } catch (e) {
+        activeFestivalYear = null;
+        clearInterval(artistActivityTimer);
         $content.innerHTML = '<p style="color:var(--text-muted)">Failed to load page. Check your connection.</p>';
       }
     }
 
     function showListing() {
+      activeFestivalYear = null;
+      clearInterval(artistActivityTimer);
       $content.classList.remove('active');
       $listing.classList.add('active');
       $backBtn.classList.remove('visible');

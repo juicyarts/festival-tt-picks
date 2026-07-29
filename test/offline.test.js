@@ -12,6 +12,7 @@ const PORT = 8765;
 const BASE = `http://localhost:${PORT}`;
 const ROOT = path.resolve(__dirname, '..');
 const FESTIVAL_SLUG = 'appletree-2026';
+const FIXED_NOW = '2026-07-31T19:30:00';
 
 let server;
 let browser;
@@ -116,6 +117,22 @@ async function run() {
     isMobile: true,
     hasTouch: true,
   });
+  await context.addInitScript(({ now }) => {
+    const RealDate = Date;
+    const fixedNow = new RealDate(now);
+    class MockDate extends RealDate {
+      constructor(...args) {
+        super(...(args.length === 0 ? [fixedNow] : args));
+      }
+      static now() {
+        return fixedNow.getTime();
+      }
+    }
+    MockDate.parse = RealDate.parse;
+    MockDate.UTC = RealDate.UTC;
+    Object.setPrototypeOf(MockDate, RealDate);
+    window.Date = MockDate;
+  }, { now: FIXED_NOW });
   page = await context.newPage();
 
   // ── TEST 1: Listing page loads ──
@@ -145,6 +162,19 @@ async function run() {
   const hasH2 = await isVisible('.md h2');
   if (hasH2) ok('Artists tab shows schedule');
   else fail('Artists tab shows schedule');
+
+  const activityStates = await page.evaluate(() => {
+    return Array.from(document.querySelectorAll('.md tbody tr')).reduce((result, row) => {
+      const artist = row.querySelector('td')?.textContent.trim();
+      if (artist) result[artist] = row.dataset.activityState || '';
+      return result;
+    }, {});
+  });
+  if (activityStates['Rikas'] === 'playing') ok('Current artist is marked as playing');
+  else fail('Current artist is marked as playing', 'state was: ' + activityStates['Rikas']);
+
+  if (activityStates['Prismala'] === 'played') ok('Past artist is marked as played');
+  else fail('Past artist is marked as played', 'state was: ' + activityStates['Prismala']);
 
   // ── TEST 5: Locations tab ──
   await page.click('[data-tab="locations"]');
