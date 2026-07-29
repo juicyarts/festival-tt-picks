@@ -579,6 +579,7 @@
     let isOnline = navigator.onLine;
     let activeFestivalYear = null;
     let artistActivityTimer = null;
+    // Festival data in this app is expected to be current-era schedule content.
     const MIN_FESTIVAL_YEAR = 2000;
     const MAX_FESTIVAL_YEAR = 2099;
 
@@ -737,7 +738,9 @@
         november: 10, nov: 10,
         december: 11, dec: 11
       };
-      const source = ((text || '').match(/\(([^)]+)\)/) || [null, text])[1] || '';
+      const headingText = text || '';
+      const parenMatch = headingText.match(/\(([^)]+)\)/);
+      const source = parenMatch ? parenMatch[1] : headingText;
       const match = source.replace(',', '').match(/([A-Za-z]+)\s+(\d{1,2})/);
       if (!match) return null;
       const month = monthMap[match[1].toLowerCase()];
@@ -746,6 +749,7 @@
     }
 
     function parseTimeRange(text) {
+      // Accept both en dashes from markdown content and plain hyphens from fallbacks/manual edits.
       const match = (text || '').trim().match(/^(\d{1,2}):(\d{2})\s*[–-]\s*(\d{1,2}):(\d{2})$/);
       if (!match) return null;
       const startHours = Number(match[1]);
