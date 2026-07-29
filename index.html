@@ -252,6 +252,22 @@
       border-bottom: none;
     }
 
+    .md tr.artist-playing td {
+      background: var(--accent-soft);
+    }
+
+    .md tr.artist-playing td:first-child {
+      border-left: 3px solid var(--accent);
+    }
+
+    .md tr.artist-played {
+      opacity: .55;
+    }
+
+    .md tr.artist-played a {
+      color: var(--text-muted);
+    }
+
     /* card-style rows on narrow screens */
     @media (max-width: 520px) {
       .md .table-wrap {
@@ -561,6 +577,8 @@
 
     let pages = [];
     let isOnline = navigator.onLine;
+    let activeFestivalYear = null;
+    let artistActivityTimer = null;
 
     // ── toast ──
     function toast(msg, ms = 2000) {
@@ -696,6 +714,106 @@
       return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
+    function parseFestivalYear(text) {
+      const match = (text || '').match(/\b(20\d{2})\b/);
+      return match ? Number(match[1]) : null;
+    }
+
+    function parseScheduleDay(text, year) {
+      if (!year) return null;
+      const monthMap = {
+        january: 0, jan: 0,
+        february: 1, feb: 1,
+        march: 2, mar: 2,
+        april: 3, apr: 3,
+        may: 4,
+        june: 5, jun: 5,
+        july: 6, jul: 6,
+        august: 7, aug: 7,
+        september: 8, sep: 8, sept: 8,
+        october: 9, oct: 9,
+        november: 10, nov: 10,
+        december: 11, dec: 11
+      };
+      const source = ((text || '').match(/\(([^)]+)\)/) || [null, text])[1] || '';
+      const match = source.replace(',', '').match(/([A-Za-z]+)\s+(\d{1,2})/);
+      if (!match) return null;
+      const month = monthMap[match[1].toLowerCase()];
+      if (month == null) return null;
+      return new Date(year, month, Number(match[2]));
+    }
+
+    function parseTimeRange(text) {
+      const match = (text || '').trim().match(/^(\d{1,2}):(\d{2})\s*[–-]\s*(\d{1,2}):(\d{2})$/);
+      if (!match) return null;
+      return {
+        startMinutes: Number(match[1]) * 60 + Number(match[2]),
+        endMinutes: Number(match[3]) * 60 + Number(match[4])
+      };
+    }
+
+    function buildDateTime(baseDate, minutes, dayOffset) {
+      return new Date(
+        baseDate.getFullYear(),
+        baseDate.getMonth(),
+        baseDate.getDate() + dayOffset,
+        Math.floor(minutes / 60),
+        minutes % 60
+      );
+    }
+
+    function setArtistActivityState(row, state) {
+      row.classList.remove('artist-playing', 'artist-played');
+      row.dataset.activityState = state || '';
+      if (state === 'playing') row.classList.add('artist-playing');
+      if (state === 'played') row.classList.add('artist-played');
+    }
+
+    function updateArtistActivityIndicators() {
+      const rows = document.querySelectorAll('.md tbody tr');
+      rows.forEach(row => setArtistActivityState(row, ''));
+      if (!activeFestivalYear) return;
+
+      const now = new Date();
+      const headings = document.querySelectorAll('.md h2');
+
+      headings.forEach(heading => {
+        const baseDate = parseScheduleDay(heading.textContent, activeFestivalYear);
+        const tableWrap = heading.nextElementSibling;
+        if (!baseDate || !tableWrap || !tableWrap.classList.contains('table-wrap')) return;
+
+        let currentDayOffset = 0;
+        let previousStartMinutes = null;
+
+        tableWrap.querySelectorAll('tbody tr').forEach(row => {
+          const timeCell = row.querySelector('td[data-label="Time"]');
+          const range = parseTimeRange(timeCell && timeCell.textContent);
+          if (!range) return;
+
+          if (previousStartMinutes !== null && range.startMinutes < previousStartMinutes) {
+            currentDayOffset += 1;
+          }
+          previousStartMinutes = range.startMinutes;
+
+          const start = buildDateTime(baseDate, range.startMinutes, currentDayOffset);
+          const endOffset = currentDayOffset + (range.endMinutes <= range.startMinutes ? 1 : 0);
+          const end = buildDateTime(baseDate, range.endMinutes, endOffset);
+
+          if (now >= end) {
+            setArtistActivityState(row, 'played');
+          } else if (now >= start && now < end) {
+            setArtistActivityState(row, 'playing');
+          }
+        });
+      });
+    }
+
+    function startArtistActivityUpdates() {
+      clearInterval(artistActivityTimer);
+      updateArtistActivityIndicators();
+      artistActivityTimer = setInterval(updateArtistActivityIndicators, 60000);
+    }
+
     let activeTab = null;
 
     // ── load & render a page ──
@@ -714,6 +832,7 @@
         if (!res.ok) throw new Error('Not found');
         const md = await res.text();
         const html = md2html(md);
+        activeFestivalYear = parseFestivalYear(page.title) || parseFestivalYear(md);
 
         // try loading notifications.md
         let notifHtml = '';
@@ -746,13 +865,18 @@
         wireTabs(slug);
         if (page.map) initMap(slug, page.map);
         initNotifications(slug);
+        startArtistActivityUpdates();
         if (defaultTab === 'artists') scrollToNow();
       } catch (e) {
+        activeFestivalYear = null;
+        clearInterval(artistActivityTimer);
         $content.innerHTML = '<p style="color:var(--text-muted)">Failed to load page. Check your connection.</p>';
       }
     }
 
     function showListing() {
+      activeFestivalYear = null;
+      clearInterval(artistActivityTimer);
       $content.classList.remove('active');
       $listing.classList.add('active');
       $backBtn.classList.remove('visible');
