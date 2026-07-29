@@ -768,8 +768,8 @@
     }
 
     function parseTimeRange(text) {
-      // Accept both en dashes from markdown content and plain hyphens from fallbacks/manual edits,
-      // including manually edited schedules like 9:30-10:15.
+      // Accept both en dashes (U+2013) from markdown content and hyphen-minuses (U+002D)
+      // from fallbacks/manual edits, including schedules like 9:30-10:15.
       const match = (text || '').trim().match(/^(\d{1,2}):(\d{2})\s*[–-]\s*(\d{1,2}):(\d{2})$/);
       if (!match) return null;
       const startHours = Number(match[1]);
