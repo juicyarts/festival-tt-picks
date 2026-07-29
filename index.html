@@ -593,7 +593,7 @@
     let isOnline = navigator.onLine;
     let activeFestivalYear = null;
     let artistActivityTimer = null;
-    // Festival data in this app is expected to be current-era schedule content.
+    // Festival data in this app is expected to stay within a modern four-digit year range.
     const MIN_FESTIVAL_YEAR = 2000;
     const MAX_FESTIVAL_YEAR = 2099;
     const ACTIVITY_UPDATE_INTERVAL_MS = 60000;
@@ -768,8 +768,8 @@
     }
 
     function parseTimeRange(text) {
-      // Accept both en dashes from markdown content and plain hyphens from fallbacks/manual edits.
-      // Single-digit hours are allowed so manually edited schedules like 9:30-10:15 still parse.
+      // Accept both en dashes from markdown content and plain hyphens from fallbacks/manual edits,
+      // including manually edited schedules like 9:30-10:15.
       const match = (text || '').trim().match(/^(\d{1,2}):(\d{2})\s*[–-]\s*(\d{1,2}):(\d{2})$/);
       if (!match) return null;
       const startHours = Number(match[1]);
