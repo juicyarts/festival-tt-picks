@@ -94,8 +94,9 @@ Utility scripts live in `scripts/`.
 
 | Script | Usage |
 |---|---|
-| `screenshot-map.js` | Generate a supermarket overview map for a festival. Requires Playwright. Edit coordinates inside the script, then run: `node scripts/screenshot-map.js`. Outputs to `{slug}/assets/supermarket-map.png`. |
-| `compress-assets.sh` | Batch-compress all PNGs in a festival's assets folder for smaller offline downloads. Requires ImageMagick. Run: `./scripts/compress-assets.sh appletree-2026` |
+| `screenshot-map.js` | Generate a supermarket + festival location overview map. Requires Playwright. Run: `node scripts/screenshot-map.js <festival-slug>`. Configure festival coords inside the script. Outputs to `{slug}/assets/supermarket-map.png`. |
+| `screenshot-lageplan.js` | Generate a festival grounds overview map (for the marker system on the Locations tab). Requires Playwright. Run: `node scripts/screenshot-lageplan.js <festival-slug>`. Outputs to `{slug}/assets/lageplan.png`. Use this when no official Lageplan exists. |
+| `compress-assets.sh` | Batch-compress all PNGs in a festival's assets folder. Requires ImageMagick. Run: `./scripts/compress-assets.sh appletree-2026` |
 
 ## Tests
 
