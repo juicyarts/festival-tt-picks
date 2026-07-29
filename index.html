@@ -720,7 +720,7 @@
     }
 
     function parseScheduleDay(text, year) {
-      if (!year) return null;
+      if (!Number.isInteger(year) || year < 2000 || year > 2099) return null;
       const monthMap = {
         january: 0, jan: 0,
         february: 1, feb: 1,
@@ -739,7 +739,7 @@
       const match = source.replace(',', '').match(/([A-Za-z]+)\s+(\d{1,2})/);
       if (!match) return null;
       const month = monthMap[match[1].toLowerCase()];
-      if (month == null) return null;
+      if (month === undefined) return null;
       return new Date(year, month, Number(match[2]));
     }
 
@@ -796,7 +796,7 @@
           previousStartMinutes = range.startMinutes;
 
           const start = buildDateTime(baseDate, range.startMinutes, currentDayOffset);
-          const endOffset = currentDayOffset + (range.endMinutes <= range.startMinutes ? 1 : 0);
+          const endOffset = currentDayOffset + (range.endMinutes < range.startMinutes ? 1 : 0);
           const end = buildDateTime(baseDate, range.endMinutes, endOffset);
 
           if (now >= end) {
