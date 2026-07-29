@@ -755,6 +755,7 @@
 
     function parseTimeRange(text) {
       // Accept both en dashes from markdown content and plain hyphens from fallbacks/manual edits.
+      // Single-digit hours are allowed so manually edited schedules like 9:30-10:15 still parse.
       const match = (text || '').trim().match(/^(\d{1,2}):(\d{2})\s*[–-]\s*(\d{1,2}):(\d{2})$/);
       if (!match) return null;
       const startHours = Number(match[1]);
@@ -784,8 +785,7 @@
     function setArtistActivityState(row, state) {
       row.classList.remove('artist-playing', 'artist-played');
       row.dataset.activityState = state || '';
-      if (state === 'playing') row.classList.add('artist-playing');
-      if (state === 'played') row.classList.add('artist-played');
+      if (state) row.classList.add('artist-' + state);
     }
 
     function updateArtistActivityIndicators() {
@@ -810,6 +810,7 @@
           if (!range) return;
 
           // A lower start time than the previous row means the schedule rolled past midnight.
+          // This assumes each day's table stays in chronological order, including late-night sets.
           if (previousStartMinutes !== null && range.startMinutes < previousStartMinutes) {
             currentDayOffset += 1;
           }
