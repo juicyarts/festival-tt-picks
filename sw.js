@@ -1,9 +1,11 @@
-const CACHE = 'festival-picks-v2';
+const CACHE = 'festival-picks-v3';
+// use self.location to build scope-relative paths
+const BASE = self.location.pathname.replace(/\/sw\.js$/, '');
 const PRELOAD = [
-  '/',
-  '/index.html',
-  '/pages.json',
-  '/manifest.json'
+  BASE + '/',
+  BASE + '/index.html',
+  BASE + '/pages.json',
+  BASE + '/manifest.json'
 ];
 
 // install: pre-cache core files

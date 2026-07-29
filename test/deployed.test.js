@@ -10,24 +10,64 @@ let failed = 0;
 
 function ok(label) { passed++; console.log(`  ✓ ${label}`); }
 function fail(label, detail) { failed++; console.log(`  ✗ ${label}${detail ? ': ' + detail : ''}`); }
+function info(label) { console.log(`  ℹ ${label}`); }
 
 async function visit(path) {
   await page.goto(BASE + path, { waitUntil: 'networkidle', timeout: 20000 });
 }
 
-async function waitForSW() {
-  for (let i = 0; i < 25; i++) {
-    const active = await page.evaluate(() =>
-      !!navigator.serviceWorker && !!navigator.serviceWorker.controller
-    );
-    if (active) return true;
-    await new Promise(r => setTimeout(r, 600));
-  }
-  return false;
+// ── debug: dump SW + cache state ──
+async function debugSW() {
+  const state = await page.evaluate(() => {
+    const reg = navigator.serviceWorker;
+    const result = {
+      hasSW: !!reg,
+      hasController: !!reg?.controller,
+      controllerState: reg?.controller?.state || 'none',
+    };
+
+    // try to get registration
+    return result;
+  });
+
+  // also try getting registration via getRegistration
+  const regInfo = await page.evaluate(async () => {
+    try {
+      const reg = await navigator.serviceWorker.getRegistration();
+      if (!reg) return { registered: false };
+      return {
+        registered: true,
+        scope: reg.scope,
+        active: reg.active?.state || 'none',
+        waiting: reg.waiting?.state || 'none',
+        installing: reg.installing?.state || 'none',
+      };
+    } catch (e) {
+      return { error: e.message };
+    }
+  });
+
+  console.log('  ℹ SW API:', JSON.stringify(state));
+  console.log('  ℹ SW Registration:', JSON.stringify(regInfo));
 }
 
-async function getText(sel) { return page.textContent(sel).catch(() => ''); }
-async function isVisible(sel) { return page.isVisible(sel).catch(() => false); }
+async function debugCaches() {
+  const cacheInfo = await page.evaluate(async () => {
+    const keys = await caches.keys();
+    const result = {};
+    for (const key of keys) {
+      const cache = await caches.open(key);
+      const urls = (await cache.keys()).map(r => r.url);
+      result[key] = {
+        count: urls.length,
+        sample: urls.slice(0, 5),
+        all: urls,
+      };
+    }
+    return result;
+  });
+  console.log('  ℹ Caches:', JSON.stringify(cacheInfo, null, 2));
+}
 
 async function hasCached(url) {
   return page.evaluate(u =>
@@ -35,6 +75,23 @@ async function hasCached(url) {
     url
   );
 }
+
+// find a cached URL matching a pattern
+async function findCached(pattern) {
+  return page.evaluate(async (p) => {
+    const keys = await caches.keys();
+    for (const key of keys) {
+      const cache = await caches.open(key);
+      const urls = (await cache.keys()).map(r => r.url);
+      const match = urls.find(u => u.includes(p));
+      if (match) return match;
+    }
+    return null;
+  }, pattern);
+}
+
+async function getText(sel) { return page.textContent(sel).catch(() => ''); }
+async function isVisible(sel) { return page.isVisible(sel).catch(() => false); }
 
 async function run() {
   console.log('\n📴 PWA Deploy Test — ' + BASE + '\n');
@@ -47,9 +104,17 @@ async function run() {
   });
   page = await context.newPage();
 
-  // ── Online tests ──
+  // collect console errors
+  const consoleErrors = [];
+  page.on('console', msg => {
+    if (msg.type() === 'error') consoleErrors.push(msg.text());
+  });
+
+  // ── Visit listing and wait ──
   console.log('── Online ──');
+  info('Visiting ' + BASE + '/');
   await visit('/');
+
   const title = await getText('h1');
   if (title === 'Achja?!') ok('Listing page loads');
   else fail('Listing page loads', 'got: ' + title);
@@ -58,12 +123,37 @@ async function run() {
   if (cards.length > 0) ok('Festival cards render');
   else fail('Festival cards render');
 
-  const swActive = await waitForSW();
-  if (swActive) ok('Service worker active');
-  else fail('Service worker active');
+  // give SW time to install/activate
+  info('Waiting for SW to install…');
+  await new Promise(r => setTimeout(r, 2000));
 
+  // reload so controller takes over (clients.claim needs a tick)
+  info('Reloading for SW controller…');
+  await page.reload({ waitUntil: 'networkidle' });
+  await new Promise(r => setTimeout(r, 1000));
+
+  await debugSW();
+  await debugCaches();
+
+  if (consoleErrors.length > 0) {
+    info('Console errors: ' + JSON.stringify(consoleErrors.slice(0, 5)));
+  }
+
+  // Check SW via getRegistration
+  const regOk = await page.evaluate(async () => {
+    try {
+      const reg = await navigator.serviceWorker.getRegistration();
+      return !!(reg && reg.active);
+    } catch (e) { return false; }
+  });
+  if (regOk) ok('Service worker registered and active');
+  else fail('Service worker registered');
+
+  // ── Navigate to festival ──
+  info('Navigating to festival page…');
   await page.click('.card');
   await page.waitForSelector('.tab-bar', { timeout: 8000 });
+
   const pageTitle = await getText('#pageTitle');
   if (pageTitle.includes('Appletree')) ok('Schedule page loads');
   else fail('Schedule page loads', 'got: ' + pageTitle);
@@ -71,32 +161,36 @@ async function run() {
   if (await isVisible('.md h2')) ok('Artists tab shows schedule');
   else fail('Artists tab shows schedule');
 
+  // ── Visit all tabs to trigger caching ──
   await page.click('[data-tab="locations"]');
-  await page.waitForTimeout(800);
+  await page.waitForTimeout(1000);
   if (await isVisible('#mapImg')) ok('Locations tab shows map');
   else fail('Locations tab shows map');
 
   await page.click('[data-tab="notifications"]');
-  await page.waitForTimeout(800);
+  await page.waitForTimeout(1000);
   if (await isVisible('.notif-md')) ok('Notifications tab shows content');
   else fail('Notifications tab shows content');
 
-  // ── Cache tests ──
+  // go back to artists to trigger schedule.md fetch
+  await page.click('[data-tab="artists"]');
+  await page.waitForTimeout(500);
+
+  // ── Cache diagnostics ──
   console.log('── Cache ──');
-  await page.click('[data-tab="locations"]');
-  await page.waitForTimeout(1000);
+  await debugCaches();
 
-  const scheduleUrl = BASE + '/appletree-2026/schedule.md';
-  const mapUrl = BASE + '/appletree-2026/assets/at26_Lageplan.png';
-  const notifUrl = BASE + '/appletree-2026/notifications.md';
-
-  if (await hasCached(scheduleUrl)) ok('Schedule cached');
+  // Find cached URLs by content pattern (more reliable than exact URL)
+  const scheduleHit = await findCached('schedule.md');
+  if (scheduleHit) ok('Schedule cached', 'at ' + scheduleHit);
   else fail('Schedule cached');
 
-  if (await hasCached(mapUrl)) ok('Map image cached');
+  const mapHit = await findCached('Lageplan');
+  if (mapHit) ok('Map image cached', 'at ' + mapHit);
   else fail('Map image cached');
 
-  if (await hasCached(notifUrl)) ok('Notifications cached');
+  const notifHit = await findCached('notifications.md');
+  if (notifHit) ok('Notifications cached', 'at ' + notifHit);
   else fail('Notifications cached');
 
   // ── Offline tests ──

@@ -13,7 +13,7 @@ jobs:
   test:
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -28,7 +28,9 @@ jobs:
         run: npx playwright install chromium --with-deps
 
       - name: Wait for Pages deploy
-        run: sleep 30
+        run: |
+          echo "Waiting for Pages deploy to propagate…"
+          sleep 45
 
       - name: Run PWA tests
         env:
