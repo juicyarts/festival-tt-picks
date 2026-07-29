@@ -1,137 +1,37 @@
 # Agents.md — Appletree Garden 2026
 
-How to collect and format data for this festival schedule.
+Festival-specific data sources and notes. See `/AGENTS.md` for common patterns.
 
 ## Sources
 
 | Source | URL | What it provides |
 |---|---|---|
-| Appletree Garden website | https://appletreegarden.de/ | Artist lineup, timetable (PNG/PDF), descriptions, lineup page |
+| Appletree Garden website | https://appletreegarden.de/ | Artist lineup, timetable (PNG/PDF), descriptions |
 | Line-up 2026 page | https://appletreegarden.de/line-up-2026/ | Full artist listing with links to detail pages |
 | Program / Timetable | https://appletreegarden.de/programm/ | Timetable as PNG image + PDF download |
+| Info page | https://appletreegarden.de/infos/ | Awareness, cashless, accessibility |
 | Artist detail pages | `https://appletreegarden.de/artist/{slug}/` | Artist bio, social links, genre hints |
-| Spotify | https://open.spotify.com/ | Artist links, genre verification |
-| MusicBrainz | https://musicbrainz.org/ | Genre and artist metadata |
-| Wikipedia | https://wikipedia.org/ | Artist background, genre |
 
 ## Timetable Extraction
 
-The official timetable is published as a **PNG image** (and PDF) on the program page. Text cannot be extracted programmatically — it requires manual transcription.
+The official timetable is an **image (PNG/PDF)** — requires manual transcription.
 
-**Workflow:**
 1. Open https://appletreegarden.de/programm/
-2. Download the timetable image / PDF
-3. Manually transcribe artist names, times, and stages into the markdown table
-4. Verify against the line-up page for artist links
+2. Download the timetable image/PDF
+3. Manually transcribe artist names, times, and stages
 
-## Artist Data Format
+## Artist Data
 
-Each table row follows this structure:
+- **Stages** (keep German): Große Bühne, Tiefes Holz, Wald Bühne, Zirkus Zelt, Oase, Glitzer Salon
+- **Genres & summaries**: sourced from artist bios on appletreegarden.de (translate from German)
+- **Spotify links**: from artist detail pages or manual search
 
-```markdown
-| Artist | Time | Stage | Rating | Genre | Summary |
-|---|---|---|---|---|---|
-| [Artist Name](spotify-link) | HH:MM–HH:MM | Stage Name | ++ / + / — | Genre / Genre | One-line summary from official bio |
-```
+## Festival Notes
 
-### Fields
-
-- **Artist**: Linked to Spotify (or SoundCloud if no Spotify). Unlinked if no streaming profile found.
-- **Time**: Start–end from the timetable. DJ/headliner sets typically 60–90 min, live acts ~45 min.
-- **Stage**: Keep original German stage names:
-  - `Große Bühne`, `Tiefes Holz`, `Wald Bühne`, `Zirkus Zelt`, `Oase`, `Glitzer Salon`
-  - `?` = unknown (check timetable)
-- **Rating**:
-  - `++` = don't miss
-  - `+` = priority
-  - `—` = unrated / skip
-- **Genre**: Concise, from official bio + MusicBrainz/Wikipedia cross-reference.
-- **Summary**: One sentence describing the artist's sound and origin, sourced from the official bio on appletreegarden.de, translated to English.
-
-### Adding a New Artist
-
-1. Find the artist on https://appletreegarden.de/line-up-2026/
-2. Open their detail page for bio text (in German, translate to English)
-3. Find their Spotify profile (often linked on the detail page or search manually)
-4. Find their time slot in the timetable image
-5. Add row to the correct day's table in `schedule.md`
-
-## Schedule HTML Page
-
-The schedule is rendered by `index.html` via:
-- `pages.json` maps `appletree-2026` slug → `appletree-2026/schedule.md`
-- Client-side markdown parser converts `.md` to HTML on the fly
-- Tables become card layout on mobile (<520px)
-
-## Notifications
-
-Notifications are stored in `notifications.md` alongside `schedule.md`. They are rendered in the **Notifications** tab of the app.
-
-### Format
-
-```markdown
-## ℹ️ Info
-- Info notification text
-
-## ℹ️ Info
-- Another info notification in its own block
-
-## ⚠️ Warnings
-- Warning notification text
-
-## 🚨 Emergency / Awareness
-- Urgent notification text
-```
-
-### Category Order
-
-Notification blocks must always appear in this order (emergency first):
-1. `## 🚨 Awareness` blocks — always at the top
-2. `## ⚠️ Warnings` blocks — time-sensitive or safety warnings
-3. `## ℹ️ Info` blocks — general information, feature announcements
-
-### Notification Blocks
-
-Each `## ...` heading plus the list item(s) that follow it is one notification block.
-
-- Add every new notification in a **new block** with the appropriate heading.
-- Do **not** append a new notification as another bullet inside an existing block.
-- The unread badge counts notification **blocks**, not bullet items inside a block.
-- Keep all `🚨 Awareness` / `⚠️ Warnings` blocks above all `ℹ️ Info` blocks.
-
-### Feature Announcements
-
-Every time a new feature is added to the app, add a new `## ℹ️ Info` block explaining:
-- What the feature does
-- How to use it
-
-Keep it short — one list item per feature block. Example:
-```markdown
-## ℹ️ Info
-- **Locations tab**: tap the map to drop markers for your tent (⛺), meeting spot (📍), or yourself (🙂). Long-press a marker to label or remove it
-```
-
-### Adding Notifications
-
-Notifications are requested via **GitHub Issues** on the repo. To add one:
-
-1. A user opens an issue describing the notification
-2. An agent edits `notifications.md` and adds a new block under the appropriate category
-3. Follow the block order above — emergency/warnings always at the top
-4. The agent commits and pushes — GitHub Actions redeploys the site automatically
-
-### Factual Sources
-
-Always verify notification facts against the official festival info page:
-- https://appletreegarden.de/infos/ (general info, awareness, accessibility, cashless)
-- https://appletreegarden.de/programm/ (timetable changes)
-
-Only include information that is confirmed on the official site. Mark speculative or user-reported info clearly.
-
-## Notes
-
-- **bangerfabrique**: Hamburg German rap collective, Saturday night 01:00–02:00, Zirkus Zelt.
-- **Awareness team**: purple vests, 24h phone **0152 03566598**, also via security/bars/awareness stand
-- **Cashless**: wristband payment only, top up at https://appletreegarden.de/cashless/
-- Festival dates for 2026: July 30 – August 1 (Thursday–Saturday).
-- The festival takes a break year in 2027 (25th anniversary in 2026).
+- **Dates**: July 30 – August 1, 2026 (Thursday–Saturday)
+- **Location**: Alter Groweg, 49356 Diepholz
+- **bangerfabrique**: Hamburg German rap collective, Saturday 01:00–02:00, Zirkus Zelt
+- **Awareness**: purple vests, 24h phone **0152 03566598**
+- **Cashless**: wristband payment, top up at https://appletreegarden.de/cashless/
+- Break year in 2027 (25th anniversary)
+- **Nearest supermarket**: famila, Groweg 50 (~300m walk)

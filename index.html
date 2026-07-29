@@ -557,6 +557,8 @@
     }
     .timetable-note { font-size: .7rem; color: var(--text-muted); margin-top: 6px; }
 
+    .location-info { margin-top: 16px; }
+
     /* ── notifications ── */
     .notif-md { margin-bottom: 16px; }
     .notif-md ul { list-style: none; padding: 0; }
@@ -665,7 +667,9 @@
       // 4. inline code
       html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
 
-      // 5. links
+      // 5. images (before links)
+      html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width:100%;border-radius:10px;display:block;margin:8px 0">');
+      // 5b. links
       html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
 
       // 6. bold & italic
@@ -928,6 +932,14 @@
           }
         } catch(e) {}
 
+        // try loading location.md
+        let locHtml = '';
+        try {
+          const locPath = slug + '/location.md';
+          const lres = await fetch(locPath);
+          if (lres.ok) { locHtml = md2html(await lres.text()); }
+        } catch(e) {}
+
         const defaultTab = activeTab || 'artists';
         $content.innerHTML =
           '<nav class="tab-bar">' +
@@ -937,19 +949,23 @@
           '</nav>' +
           '<div class="tab-panel tab-artists' + (defaultTab === 'artists' ? ' active' : '') + '">' +
             '<div class="md">' + html + '</div>' +
-            '<div class="timetable-section">' +
-              '<h3>📋 Official Timetable</h3>' +
-              '<a href="appletree-2026/assets/timetable.png" target="_blank">' +
-                '<img class="timetable-img" src="appletree-2026/assets/timetable.png" alt="Official timetable">' +
-              '</a>' +
-              '<p class="timetable-note">Tap to enlarge — official timetable from appletreegarden.de</p>' +
-            '</div>' +
+            (page.timetable ? '' +
+              '<div class="timetable-section">' +
+                '<h3>📋 Official Timetable</h3>' +
+                '<a href="' + page.timetable + '" target="_blank">' +
+                  '<img class="timetable-img" src="' + page.timetable + '" alt="Official timetable">' +
+                '</a>' +
+                '<p class="timetable-note">Tap to enlarge — official timetable</p>' +
+              '</div>' : '') +
           '</div>' +
           '<div class="tab-panel tab-locations' + (defaultTab === 'locations' ? ' active' : '') + '">' + buildLocationsPanel(page) + '</div>' +
           '<div class="tab-panel tab-notifications' + (defaultTab === 'notifications' ? ' active' : '') + '">' + buildNotificationsPanel(notifHtml) + '</div>';
 
         wireTabs(slug, notifCount);
         if (page.map) initMap(slug, page.map);
+        // fill location info from location.md
+        const locEl = document.getElementById('locationInfo');
+        if (locEl && locHtml) locEl.innerHTML = locHtml;
         initNotifications(slug, notifCount, defaultTab);
         startArtistActivityUpdates();
         if (defaultTab === 'artists') scrollToNow();
@@ -989,18 +1005,53 @@
 
     // ── scroll to current day ──
     function scrollToNow() {
-      // Appletree Garden 2026: July 30 (Thu), 31 (Fri), Aug 1 (Sat)
-      const dayMap = {4: 'Thursday', 5: 'Friday', 6: 'Saturday'};
-      const today = new Date();
-      const target = dayMap[today.getDay()];
-      if (!target) return;
-      // find the h2 heading matching the target day
+      const dayMap = {1:'Monday', 2:'Tuesday', 3:'Wednesday', 4:'Thursday', 5:'Friday', 6:'Saturday', 0:'Sunday'};
+      const now = new Date();
+      const targetDay = dayMap[now.getDay()];
+      if (!targetDay) return;
+
       const h2s = document.querySelectorAll('.md h2');
+      let dayH2 = null;
       for (const h of h2s) {
-        if (h.textContent.toLowerCase().startsWith(target.toLowerCase())) {
-          h.scrollIntoView({behavior: 'smooth', block: 'start'});
-          return;
+        if (h.textContent.toLowerCase().startsWith(targetDay.toLowerCase())) {
+          dayH2 = h; break;
         }
+      }
+      if (!dayH2) return;
+
+      // find the current or next time slot within this day
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      let bestRow = null;
+      let bestMinutes = Infinity;
+
+      // walk DOM from day heading to next heading or end
+      let el = dayH2.nextElementSibling;
+      while (el && el.tagName !== 'H2') {
+        if (el.classList.contains('table-wrap')) {
+          const rows = el.querySelectorAll('tbody tr');
+          for (const row of rows) {
+            const timeCell = row.querySelector('td:nth-child(2)');
+            if (!timeCell) continue;
+            const timeText = timeCell.textContent.trim();
+            const match = timeText.match(/(\d{1,2}):(\d{2})/);
+            if (!match) continue;
+            const startMin = parseInt(match[1]) * 60 + parseInt(match[2]);
+            // handle after-midnight times (e.g. 00:40 = 24*60+40)
+            const adjusted = startMin < 360 && currentMinutes > 720 ? startMin + 1440 : startMin;
+            if (adjusted >= currentMinutes && adjusted < bestMinutes) {
+              bestMinutes = adjusted;
+              bestRow = row;
+            }
+          }
+        }
+        el = el.nextElementSibling;
+      }
+
+      const scrollTarget = bestRow || dayH2;
+      scrollTarget.scrollIntoView({behavior: 'smooth', block: 'start'});
+      if (bestRow) {
+        bestRow.style.background = 'var(--accent-soft)';
+        setTimeout(() => { bestRow.style.background = ''; }, 2000);
       }
     }
 
@@ -1029,32 +1080,28 @@
     // ── locations panel ──
     function buildLocationsPanel(page) {
       const mapSrc = page.map || '';
-      return '' +
-        '<div class="map-toolbar" id="mapToolbar">' +
-        '<button data-mode="tent">⛺ Tent</button>' +
-        '<button data-mode="meet">📍 Meet</button>' +
-        '<button data-mode="me">🙂 Me</button>' +
-        '<button id="clearMarkers">✕ Clear</button>' +
-        '</div>' +
-        '<div class="map-container" id="mapContainer">' +
-        '<img src="' + mapSrc + '" id="mapImg" alt="Festival map">' +
-        '<div id="markersLayer"></div>' +
-        '</div>' +
-        '<div class="map-share-wrap"><button id="shareMap">📤 Share my map</button></div>' +
-        '<p class="map-help">Select a type above, then tap the map to place or move it. Tap a marker to select it for moving. Long-press a marker to label or remove. Long-press the Me button to choose your emoji.</p>' +
-        '<div class="supermarket-section">' +
-          '<h3>🚗 Getting There</h3>' +
-          '<a href="appletree-2026/assets/anreise.png" target="_blank">' +
-            '<img class="supermarket-map" src="appletree-2026/assets/anreise.png" alt="Getting there directions">' +
-          '</a>' +
-          '<p class="supermarket-note">Tap map to enlarge — official travel directions from appletreegarden.de</p>' +
-          '<h3>🛒 Nearest Supermarkets</h3>' +
-          '<a href="https://maps.google.com/?q=supermarket+Diepholz" target="_blank">' +
-            '<img class="supermarket-map" src="appletree-2026/assets/supermarket-map.png" alt="Supermarkets near Diepholz">' +
-          '</a>' +
-          '<p class="supermarket-note">🎪 Alter Groweg &nbsp;|&nbsp; 🛒 famila (Groweg 50, ~300m walk), Netto, ALDI</p>' +
-          '<p class="supermarket-note">Tap map to open in Google Maps for navigation</p>' +
-        '</div>';
+      let html = '';
+
+      // Festival grounds map with markers (if map image exists)
+      if (mapSrc) {
+        html += '' +
+          '<div class="map-toolbar" id="mapToolbar">' +
+            '<button data-mode="tent">⛺ Tent</button>' +
+            '<button data-mode="meet">📍 Meet</button>' +
+            '<button data-mode="me">🙂 Me</button>' +
+            '<button id="clearMarkers">✕ Clear</button>' +
+          '</div>' +
+          '<div class="map-container" id="mapContainer">' +
+            '<img src="' + mapSrc + '" id="mapImg" alt="Festival map">' +
+            '<div id="markersLayer"></div>' +
+          '</div>' +
+          '<div class="map-share-wrap"><button id="shareMap">📤 Share my map</button></div>' +
+          '<p class="map-help">Select a type above, then tap the map to place or move it. Tap a marker to select it for moving. Long-press a marker to label or remove. Long-press the Me button to choose your emoji.</p>';
+      }
+
+      // Location info placeholder — filled by loadPage after fetching location.md
+      html += '<div id="locationInfo" class="md location-info"></div>';
+      return html;
     }
 
     function initMap(slug, mapSrc) {

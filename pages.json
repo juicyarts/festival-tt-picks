@@ -4,6 +4,15 @@
     "title": "Appletree Garden 2026",
     "date": "July 30 – Aug 1, 2026",
     "file": "appletree-2026/schedule.md",
-    "map": "appletree-2026/assets/at26_Lageplan.png"
+    "map": "appletree-2026/assets/at26_Lageplan.png",
+    "timetable": "appletree-2026/assets/timetable.png"
+  },
+  {
+    "slug": "hoflaerm-2026",
+    "title": "Hoflärm Open Air 2026",
+    "date": "Aug 13–15, 2026",
+    "file": "hoflaerm-2026/schedule.md",
+    "map": "hoflaerm-2026/assets/lageplan.png",
+    "timetable": "hoflaerm-2026/assets/timetable.png"
   }
 ]
