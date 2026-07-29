@@ -1,0 +1,11 @@
+{
+  "name": "festival-tt-picks",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/offline.test.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.45.0"
+  }
+}
