@@ -557,6 +557,8 @@
     }
     .timetable-note { font-size: .7rem; color: var(--text-muted); margin-top: 6px; }
 
+    .location-info { margin-top: 16px; }
+
     /* ── notifications ── */
     .notif-md { margin-bottom: 16px; }
     .notif-md ul { list-style: none; padding: 0; }
@@ -665,7 +667,9 @@
       // 4. inline code
       html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
 
-      // 5. links
+      // 5. images (before links)
+      html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width:100%;border-radius:10px;display:block;margin:8px 0">');
+      // 5b. links
       html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
 
       // 6. bold & italic
@@ -928,6 +932,14 @@
           }
         } catch(e) {}
 
+        // try loading location.md
+        let locHtml = '';
+        try {
+          const locPath = slug + '/location.md';
+          const lres = await fetch(locPath);
+          if (lres.ok) { locHtml = md2html(await lres.text()); }
+        } catch(e) {}
+
         const defaultTab = activeTab || 'artists';
         $content.innerHTML =
           '<nav class="tab-bar">' +
@@ -951,6 +963,9 @@
 
         wireTabs(slug, notifCount);
         if (page.map) initMap(slug, page.map);
+        // fill location info from location.md
+        const locEl = document.getElementById('locationInfo');
+        if (locEl && locHtml) locEl.innerHTML = locHtml;
         initNotifications(slug, notifCount, defaultTab);
         startArtistActivityUpdates();
         if (defaultTab === 'artists') scrollToNow();
@@ -1027,11 +1042,10 @@
 
     // ── locations panel ──
     function buildLocationsPanel(page) {
-      const slug = page.slug;
       const mapSrc = page.map || '';
       let html = '';
 
-      // Festival grounds map (only if map image exists)
+      // Festival grounds map with markers (if map image exists)
       if (mapSrc) {
         html += '' +
           '<div class="map-toolbar" id="mapToolbar">' +
@@ -1048,38 +1062,8 @@
           '<p class="map-help">Select a type above, then tap the map to place or move it. Tap a marker to select it for moving. Long-press a marker to label or remove. Long-press the Me button to choose your emoji.</p>';
       }
 
-      // Festival-specific location sections
-      if (slug === 'appletree-2026') {
-        html += '' +
-          '<div class="supermarket-section">' +
-            '<h3>🚗 Getting There</h3>' +
-            '<a href="appletree-2026/assets/anreise.png" target="_blank">' +
-              '<img class="supermarket-map" src="appletree-2026/assets/anreise.png" alt="Getting there directions">' +
-            '</a>' +
-            '<p class="supermarket-note">Tap map to enlarge — official travel directions from appletreegarden.de</p>' +
-            '<h3>🛒 Nearest Supermarkets</h3>' +
-            '<a href="https://maps.google.com/?q=supermarket+Diepholz" target="_blank">' +
-              '<img class="supermarket-map" src="appletree-2026/assets/supermarket-map.png" alt="Supermarkets near Diepholz">' +
-            '</a>' +
-            '<p class="supermarket-note">🎪 Alter Groweg &nbsp;|&nbsp; 🛒 famila (Groweg 50, ~300m walk), Netto, ALDI</p>' +
-            '<p class="supermarket-note">Tap map to open in Google Maps for navigation</p>' +
-          '</div>';
-      } else if (slug === 'hoflaerm-2026') {
-        html += '' +
-          '<div class="supermarket-section">' +
-            '<h3>📍 Location & Nearest Supermarket</h3>' +
-            '<a href="https://maps.google.com/?q=Obersalterberger+Hof+1+57577+Marienthal" target="_blank">' +
-              '<img class="supermarket-map" src="hoflaerm-2026/assets/supermarket-map.png" alt="Festival and supermarket map">' +
-            '</a>' +
-            '<p class="supermarket-note">🎪 Obersalterberger Hof &nbsp;|&nbsp; 🛒 REWE (Marktzentrum 7, ~3 km) — tap to open in Google Maps</p>' +
-            '<h3>🚂 Getting There</h3>' +
-            '<p class="supermarket-note"><strong>Train:</strong> Bahnhof Kloster Marienthal — directly in town, a few minutes walk</p>' +
-            '<p class="supermarket-note"><strong>Car:</strong> Via A3 or A45 into the Westerwald. Parking directly on site.</p>' +
-            '<h3>🏕 Camping</h3>' +
-            '<p class="supermarket-note">Campground directly at the festival (0–500m to stage). Camp next to your car. Showers and proper toilets. Breakfast stand in the mornings.</p>' +
-          '</div>';
-      }
-
+      // Location info placeholder — filled by loadPage after fetching location.md
+      html += '<div id="locationInfo" class="md location-info"></div>';
       return html;
     }
 
