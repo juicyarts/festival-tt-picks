@@ -718,7 +718,7 @@
 
     function countNotifications(md) {
       // Count top-level markdown bullet items that represent notifications.
-      return (md.match(/^- /gm) || []).length;
+      return (md.match(/^- (?=\S)/gm) || []).length;
     }
 
     function getSeenNotifications(slug) {
@@ -743,11 +743,10 @@
       if (!badge) {
         badge = document.createElement('span');
         badge.className = 'tab-badge';
-        badge.setAttribute('aria-live', 'polite');
+        badge.setAttribute('aria-hidden', 'true');
         btn.appendChild(badge);
       }
       badge.textContent = String(unreadCount);
-      badge.setAttribute('aria-label', 'You have ' + unreadCount + ' unread notification' + (unreadCount === 1 ? '' : 's'));
     }
 
     function markNotificationsSeen(slug, notificationCount) {
