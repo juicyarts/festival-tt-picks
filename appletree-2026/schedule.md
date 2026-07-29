@@ -7,6 +7,7 @@
 | Artist | Time | Stage | Rating | Genre | Summary |
 |---|---|---|---|---|---|
 | [Baby Smith](https://open.spotify.com/artist/4QzM5sY3QDA4mmgv8Xj932) | 16:00–16:45 | Tiefes Holz | — | Psychedelic Pop | Australian duo based in Berlin, met at Kottbusser Tor — sun-drenched, heart-opening psychedelic pop |
+| [Udo West](https://open.spotify.com/artist/1BHZAAB3hQWnA41ZquzlC9) | 17:00–17:45 | Zirkus Zelt | — | NDW-Pop | Bavarian band channeling 80s Neue Deutsche Welle — danceable synth sounds, funky grooves & ironic everyday tales |
 | [Bella Barbe](https://open.spotify.com/artist/0vCuoT3gNNLmYGlZnQSGH6) | 19:30–20:15 | Zirkus Zelt | — | Soul / Rap | 19-year-old Londoner — soulful melodies meet raw rap bars, deeply personal storytelling |
 | [Sébastien Tellier](https://open.spotify.com/artist/23ymPLjbtAMzTJS2qRtQ8Z) | 21:10–22:25 | Große Bühne | — | French Synth-Pop / Electronic | French pop icon (Eurovision 2008), synth-heavy dreamscapes floating between heaven and the dancefloor |
 | [World Brain](https://open.spotify.com/artist/2CiVXlqZHnOj4nWFBj3s2k) | 21:20–22:20 | Oase | — | Indie Electronic | One-man project by Lucas Chantre — digital nostalgia meets organic grooves, Oase at dusk |
