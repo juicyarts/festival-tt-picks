@@ -1005,16 +1005,53 @@
 
     // ── scroll to current day ──
     function scrollToNow() {
-      // maps JS getDay() to day names for any festival
       const dayMap = {1:'Monday', 2:'Tuesday', 3:'Wednesday', 4:'Thursday', 5:'Friday', 6:'Saturday', 0:'Sunday'};
-      const target = dayMap[new Date().getDay()];
-      if (!target) return;
+      const now = new Date();
+      const targetDay = dayMap[now.getDay()];
+      if (!targetDay) return;
+
       const h2s = document.querySelectorAll('.md h2');
+      let dayH2 = null;
       for (const h of h2s) {
-        if (h.textContent.toLowerCase().startsWith(target.toLowerCase())) {
-          h.scrollIntoView({behavior: 'smooth', block: 'start'});
-          return;
+        if (h.textContent.toLowerCase().startsWith(targetDay.toLowerCase())) {
+          dayH2 = h; break;
         }
+      }
+      if (!dayH2) return;
+
+      // find the current or next time slot within this day
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      let bestRow = null;
+      let bestMinutes = Infinity;
+
+      // walk DOM from day heading to next heading or end
+      let el = dayH2.nextElementSibling;
+      while (el && el.tagName !== 'H2') {
+        if (el.classList.contains('table-wrap')) {
+          const rows = el.querySelectorAll('tbody tr');
+          for (const row of rows) {
+            const timeCell = row.querySelector('td:nth-child(2)');
+            if (!timeCell) continue;
+            const timeText = timeCell.textContent.trim();
+            const match = timeText.match(/(\d{1,2}):(\d{2})/);
+            if (!match) continue;
+            const startMin = parseInt(match[1]) * 60 + parseInt(match[2]);
+            // handle after-midnight times (e.g. 00:40 = 24*60+40)
+            const adjusted = startMin < 360 && currentMinutes > 720 ? startMin + 1440 : startMin;
+            if (adjusted >= currentMinutes && adjusted < bestMinutes) {
+              bestMinutes = adjusted;
+              bestRow = row;
+            }
+          }
+        }
+        el = el.nextElementSibling;
+      }
+
+      const scrollTarget = bestRow || dayH2;
+      scrollTarget.scrollIntoView({behavior: 'smooth', block: 'start'});
+      if (bestRow) {
+        bestRow.style.background = 'var(--accent-soft)';
+        setTimeout(() => { bestRow.style.background = ''; }, 2000);
       }
     }
 
