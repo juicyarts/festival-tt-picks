@@ -158,6 +158,16 @@ async function run() {
     const res = await fetch(festivalSlug + '/notifications.md');
     return window.countNotifications(await res.text());
   }, FESTIVAL_SLUG);
+  const sampleBlockCount = await page.evaluate(() => window.countNotifications([
+    '## ℹ️ Info',
+    '- First item',
+    '- Still the same notification block',
+    '',
+    '## ℹ️ Info',
+    '- Second block'
+  ].join('\n')));
+  if (sampleBlockCount === 2) ok('Notifications count notification blocks, not bullet items');
+  else fail('Notifications count notification blocks, not bullet items', 'count was: ' + sampleBlockCount);
   const notifBadgeVisible = await isVisible('[data-tab="notifications"] .tab-badge');
   if (notifBadgeVisible) ok('Notifications tab renders unread count badge');
   else fail('Notifications tab renders unread count badge');
@@ -188,7 +198,7 @@ async function run() {
   else fail('Back button returns to listing');
 
   await page.evaluate(({ slug, count }) => {
-    localStorage.setItem(slug + '-notifications-seen', String(Math.max(count - 1, 0)));
+    localStorage.setItem(window.getNotificationStorageKey(slug), String(Math.max(count - 1, 0)));
   }, { slug: FESTIVAL_SLUG, count: expectedNotifCount });
   await page.click('.card');
   await page.waitForSelector('.tab-bar', { timeout: 5000 });

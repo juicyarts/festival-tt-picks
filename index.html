@@ -713,12 +713,12 @@
     let activeTab = null;
 
     function getNotificationStorageKey(slug) {
-      return slug + '-notifications-seen';
+      return slug + '-notifications-seen-blocks-v1';
     }
 
     function countNotifications(md) {
-      // Count top-level markdown bullet items that represent notifications.
-      return (md.match(/^- (?=\S)/gm) || []).length;
+      // Count markdown notification blocks, each identified by its category heading.
+      return (md.match(/^##\s+(?:🚨|⚠️|ℹ️)\s+/gm) || []).length;
     }
 
     function getSeenNotifications(slug) {
