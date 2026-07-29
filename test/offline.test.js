@@ -187,6 +187,15 @@ async function run() {
   if (listingVisible) ok('Back button returns to listing');
   else fail('Back button returns to listing');
 
+  await page.evaluate(({ slug, count }) => {
+    localStorage.setItem(slug + '-notifications-seen', String(Math.max(count - 1, 0)));
+  }, { slug: FESTIVAL_SLUG, count: expectedNotifCount });
+  await page.click('.card');
+  await page.waitForSelector('.tab-bar', { timeout: 5000 });
+  const oneNewBadge = await getText('[data-tab="notifications"] .tab-badge');
+  if (oneNewBadge === '1') ok('Notifications badge reflects one new item since last visit');
+  else fail('Notifications badge reflects one new item since last visit', 'badge was: ' + oneNewBadge);
+
   // ── TEST 8: Assets cached ──
   console.log('\n── Cache tests ──');
   await visit('/#' + FESTIVAL_SLUG);
