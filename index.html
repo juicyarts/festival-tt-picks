@@ -937,13 +937,14 @@
           '</nav>' +
           '<div class="tab-panel tab-artists' + (defaultTab === 'artists' ? ' active' : '') + '">' +
             '<div class="md">' + html + '</div>' +
-            '<div class="timetable-section">' +
-              '<h3>📋 Official Timetable</h3>' +
-              '<a href="appletree-2026/assets/timetable.png" target="_blank">' +
-                '<img class="timetable-img" src="appletree-2026/assets/timetable.png" alt="Official timetable">' +
-              '</a>' +
-              '<p class="timetable-note">Tap to enlarge — official timetable from appletreegarden.de</p>' +
-            '</div>' +
+            (page.timetable ? '' +
+              '<div class="timetable-section">' +
+                '<h3>📋 Official Timetable</h3>' +
+                '<a href="' + page.timetable + '" target="_blank">' +
+                  '<img class="timetable-img" src="' + page.timetable + '" alt="Official timetable">' +
+                '</a>' +
+                '<p class="timetable-note">Tap to enlarge — official timetable</p>' +
+              '</div>' : '') +
           '</div>' +
           '<div class="tab-panel tab-locations' + (defaultTab === 'locations' ? ' active' : '') + '">' + buildLocationsPanel(page) + '</div>' +
           '<div class="tab-panel tab-notifications' + (defaultTab === 'notifications' ? ' active' : '') + '">' + buildNotificationsPanel(notifHtml) + '</div>';
