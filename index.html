@@ -397,6 +397,10 @@
 
     .tab-bar button {
       flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
       padding: 10px 4px;
       border: none;
       border-bottom: 2px solid transparent;
@@ -411,6 +415,16 @@
     .tab-bar button.active {
       color: var(--accent);
       border-bottom-color: var(--accent);
+    }
+
+    .tab-badge {
+      min-width: 18px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.68rem;
+      line-height: 1.3;
     }
 
     /* ── tab panels ── */
@@ -579,7 +593,7 @@
     let isOnline = navigator.onLine;
     let activeFestivalYear = null;
     let artistActivityTimer = null;
-    // Festival data in this app is expected to be current-era schedule content.
+    // Festival data in this app is expected to stay within a modern four-digit year range.
     const MIN_FESTIVAL_YEAR = 2000;
     const MAX_FESTIVAL_YEAR = 2099;
     const ACTIVITY_UPDATE_INTERVAL_MS = 60000;
@@ -754,8 +768,8 @@
     }
 
     function parseTimeRange(text) {
-      // Accept both en dashes from markdown content and plain hyphens from fallbacks/manual edits.
-      // Single-digit hours are allowed so manually edited schedules like 9:30-10:15 still parse.
+      // Accept both en dashes (U+2013) and hyphen-minuses (U+002D); the `[–-]`
+      // character class covers both markdown content and manual edits like 9:30-10:15.
       const match = (text || '').trim().match(/^(\d{1,2}):(\d{2})\s*[–-]\s*(\d{1,2}):(\d{2})$/);
       if (!match) return null;
       const startHours = Number(match[1]);
@@ -810,7 +824,8 @@
           if (!range) return;
 
           // A lower start time than the previous row means the schedule rolled past midnight.
-          // This assumes each day's table stays in chronological order, including late-night sets.
+          // This assumes each day's rows stay in chronological order; otherwise later rows
+          // could be shifted onto the wrong day and show incorrect playing/played badges.
           if (previousStartMinutes !== null && range.startMinutes < previousStartMinutes) {
             currentDayOffset += 1;
           }
@@ -837,6 +852,50 @@
 
     let activeTab = null;
 
+    function getNotificationStorageKey(slug) {
+      return slug + '-notifications-seen-blocks-v1';
+    }
+
+    function countNotifications(md) {
+      // Count markdown notification blocks, each identified by its category heading.
+      return (md.match(/^##\s+(?:🚨|⚠️|ℹ️)\s+/gm) || []).length;
+    }
+
+    function getSeenNotifications(slug) {
+      try {
+        const seen = parseInt(localStorage.getItem(getNotificationStorageKey(slug)) || '0', 10);
+        return Number.isFinite(seen) ? Math.max(seen, 0) : 0;
+      } catch (e) {
+        return 0;
+      }
+    }
+
+    function updateNotificationBadge(unreadCount) {
+      const btn = document.querySelector('.tab-bar [data-tab="notifications"]');
+      if (!btn) return;
+
+      let badge = btn.querySelector('.tab-badge');
+      if (unreadCount <= 0) {
+        if (badge) badge.remove();
+        return;
+      }
+
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'tab-badge';
+        badge.setAttribute('aria-hidden', 'true');
+        btn.appendChild(badge);
+      }
+      badge.textContent = String(unreadCount);
+    }
+
+    function markNotificationsSeen(slug, notificationCount) {
+      try {
+        localStorage.setItem(getNotificationStorageKey(slug), String(notificationCount));
+      } catch (e) {}
+      updateNotificationBadge(0);
+    }
+
     // ── load & render a page ──
     async function loadPage(slug) {
       const page = pages.find(p => p.slug === slug);
@@ -856,11 +915,17 @@
         activeFestivalYear = parseFestivalYear(page.title) || parseFestivalYear(md);
 
         // try loading notifications.md
+        let notifMd = '';
         let notifHtml = '';
+        let notifCount = 0;
         try {
           const notifPath = slug + '/notifications.md';
           const nres = await fetch(notifPath);
-          if (nres.ok) { notifHtmlCache = notifHtml = md2html(await nres.text()); }
+          if (nres.ok) {
+            notifMd = await nres.text();
+            notifCount = countNotifications(notifMd);
+            notifHtml = md2html(notifMd);
+          }
         } catch(e) {}
 
         const defaultTab = activeTab || 'artists';
@@ -883,9 +948,9 @@
           '<div class="tab-panel tab-locations' + (defaultTab === 'locations' ? ' active' : '') + '">' + buildLocationsPanel(page) + '</div>' +
           '<div class="tab-panel tab-notifications' + (defaultTab === 'notifications' ? ' active' : '') + '">' + buildNotificationsPanel(notifHtml) + '</div>';
 
-        wireTabs(slug);
+        wireTabs(slug, notifCount);
         if (page.map) initMap(slug, page.map);
-        initNotifications(slug);
+        initNotifications(slug, notifCount, defaultTab);
         startArtistActivityUpdates();
         if (defaultTab === 'artists') scrollToNow();
       } catch (e) {
@@ -940,7 +1005,7 @@
     }
 
     // ── tabs ──
-    function wireTabs(slug) {
+    function wireTabs(slug, notificationCount) {
       const tabs = document.querySelectorAll('.tab-bar button');
       const panels = document.querySelectorAll('.tab-panel');
       tabs.forEach(btn => {
@@ -955,6 +1020,7 @@
           panels.forEach(p => p.classList.remove('active'));
           btn.classList.add('active');
           document.querySelector('.tab-' + t).classList.add('active');
+          if (t === 'notifications') markNotificationsSeen(slug, notificationCount);
           if (t === 'artists') scrollToNow();
         });
       });
@@ -1198,8 +1264,9 @@
       return notifHtml ? '<div class="md notif-md">' + notifHtml + '</div>' : '';
     }
 
-    function initNotifications(slug) {
-      // notifications are now fully static from notifications.md
+    function initNotifications(slug, notificationCount, defaultTab) {
+      updateNotificationBadge(Math.max(notificationCount - getSeenNotifications(slug), 0));
+      if (defaultTab === 'notifications') markNotificationsSeen(slug, notificationCount);
     }
 
     // online/offline

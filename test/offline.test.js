@@ -11,6 +11,7 @@ const path = require('path');
 const PORT = 8765;
 const BASE = `http://localhost:${PORT}`;
 const ROOT = path.resolve(__dirname, '..');
+const FESTIVAL_SLUG = 'appletree-2026';
 const FIXED_NOW = '2026-07-31T19:30:00';
 
 let server;
@@ -183,11 +184,41 @@ async function run() {
   else fail('Locations tab shows map');
 
   // ── TEST 6: Notifications tab ──
+  const expectedNotifCount = await page.evaluate(async festivalSlug => {
+    const res = await fetch(festivalSlug + '/notifications.md');
+    return window.countNotifications(await res.text());
+  }, FESTIVAL_SLUG);
+  const sampleBlockCount = await page.evaluate(() => window.countNotifications([
+    '## ℹ️ Info',
+    '- First item',
+    '- Still the same notification block',
+    '',
+    '## ℹ️ Info',
+    '- Second block'
+  ].join('\n')));
+  if (sampleBlockCount === 2) ok('Notifications count notification blocks, not bullet items');
+  else fail('Notifications count notification blocks, not bullet items', 'count was: ' + sampleBlockCount);
+  const notifBadgeVisible = await isVisible('[data-tab="notifications"] .tab-badge');
+  if (notifBadgeVisible) ok('Notifications tab renders unread count badge');
+  else fail('Notifications tab renders unread count badge');
+
+  const notifBadge = await getText('[data-tab="notifications"] .tab-badge');
+  if (notifBadge === String(expectedNotifCount)) ok('Notifications tab shows unread count badge');
+  else fail('Notifications tab shows unread count badge', 'badge was: ' + notifBadge);
+
   await page.click('[data-tab="notifications"]');
   await page.waitForTimeout(500);
   const notifContent = await isVisible('.notif-md');
   if (notifContent) ok('Notifications tab shows content');
   else fail('Notifications tab shows content');
+
+  const swimReminder = await getText('.tab-panel.tab-notifications');
+  if (swimReminder.includes('Fancy a swim? There’s a shuttle bus for it') && swimReminder.includes('pack a coat')) ok('Notifications include swimming reminder');
+  else fail('Notifications include swimming reminder');
+
+  const notifBadgeCleared = await page.evaluate(() => !document.querySelector('[data-tab="notifications"] .tab-badge'));
+  if (notifBadgeCleared) ok('Notifications badge clears after opening tab');
+  else fail('Notifications badge clears after opening tab');
 
   // ── TEST 7: Back to listing ──
   await page.click('#backBtn');
@@ -196,9 +227,18 @@ async function run() {
   if (listingVisible) ok('Back button returns to listing');
   else fail('Back button returns to listing');
 
+  await page.evaluate(({ slug, count }) => {
+    localStorage.setItem(window.getNotificationStorageKey(slug), String(Math.max(count - 1, 0)));
+  }, { slug: FESTIVAL_SLUG, count: expectedNotifCount });
+  await page.click('.card');
+  await page.waitForSelector('.tab-bar', { timeout: 5000 });
+  const oneNewBadge = await getText('[data-tab="notifications"] .tab-badge');
+  if (oneNewBadge === '1') ok('Notifications badge reflects one new item since last visit');
+  else fail('Notifications badge reflects one new item since last visit', 'badge was: ' + oneNewBadge);
+
   // ── TEST 8: Assets cached ──
   console.log('\n── Cache tests ──');
-  await visit('/#appletree-2026');
+  await visit('/#' + FESTIVAL_SLUG);
   await page.waitForSelector('.tab-bar', { timeout: 5000 });
   await page.click('[data-tab="locations"]');
   await page.waitForTimeout(1000);
@@ -226,7 +266,7 @@ async function run() {
   else fail('Listing page loads offline', 'got: ' + offlineTitle);
 
   // ── TEST 10: Offline — schedule page ──
-  await visit('/#appletree-2026');
+  await visit('/#' + FESTIVAL_SLUG);
   const offlineH2 = await getText('.md h2');
   if (offlineH2 && offlineH2.length > 0) ok('Schedule loads offline');
   else fail('Schedule loads offline');
@@ -247,7 +287,7 @@ async function run() {
 
   // ── TEST 13: URL hash tab persistence ──
   await goOnline();
-  await visit('/#appletree-2026:locations');
+  await visit('/#' + FESTIVAL_SLUG + ':locations');
   await page.waitForSelector('.tab-bar', { timeout: 5000 });
   await page.waitForTimeout(500);
   const locActive = await page.evaluate(() =>

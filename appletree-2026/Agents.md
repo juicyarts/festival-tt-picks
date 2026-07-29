@@ -73,6 +73,9 @@ Notifications are stored in `notifications.md` alongside `schedule.md`. They are
 ## ℹ️ Info
 - Info notification text
 
+## ℹ️ Info
+- Another info notification in its own block
+
 ## ⚠️ Warnings
 - Warning notification text
 
@@ -82,19 +85,29 @@ Notifications are stored in `notifications.md` alongside `schedule.md`. They are
 
 ### Category Order
 
-Categories must always appear in this order (emergency first):
-1. `## 🚨 Awareness` — always at the top
-2. `## ⚠️ Warnings` — time-sensitive or safety warnings
-3. `## ℹ️ Info` — general information, feature announcements
+Notification blocks must always appear in this order (emergency first):
+1. `## 🚨 Awareness` blocks — always at the top
+2. `## ⚠️ Warnings` blocks — time-sensitive or safety warnings
+3. `## ℹ️ Info` blocks — general information, feature announcements
+
+### Notification Blocks
+
+Each `## ...` heading plus the list item(s) that follow it is one notification block.
+
+- Add every new notification in a **new block** with the appropriate heading.
+- Do **not** append a new notification as another bullet inside an existing block.
+- The unread badge counts notification **blocks**, not bullet items inside a block.
+- Keep all `🚨 Awareness` / `⚠️ Warnings` blocks above all `ℹ️ Info` blocks.
 
 ### Feature Announcements
 
-Every time a new feature is added to the app, add an `## ℹ️ Info` notification explaining:
+Every time a new feature is added to the app, add a new `## ℹ️ Info` block explaining:
 - What the feature does
 - How to use it
 
-Keep it short — one list item per feature. Example:
+Keep it short — one list item per feature block. Example:
 ```markdown
+## ℹ️ Info
 - **Locations tab**: tap the map to drop markers for your tent (⛺), meeting spot (📍), or yourself (🙂). Long-press a marker to label or remove it
 ```
 
@@ -103,8 +116,8 @@ Keep it short — one list item per feature. Example:
 Notifications are requested via **GitHub Issues** on the repo. To add one:
 
 1. A user opens an issue describing the notification
-2. An agent edits `notifications.md` and adds the entry under the appropriate category
-3. Follow the category order above — emergency always at the top
+2. An agent edits `notifications.md` and adds a new block under the appropriate category
+3. Follow the block order above — emergency/warnings always at the top
 4. The agent commits and pushes — GitHub Actions redeploys the site automatically
 
 ### Factual Sources
