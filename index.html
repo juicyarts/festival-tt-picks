@@ -989,12 +989,10 @@
 
     // ── scroll to current day ──
     function scrollToNow() {
-      // Appletree Garden 2026: July 30 (Thu), 31 (Fri), Aug 1 (Sat)
-      const dayMap = {4: 'Thursday', 5: 'Friday', 6: 'Saturday'};
-      const today = new Date();
-      const target = dayMap[today.getDay()];
+      // maps JS getDay() to day names for any festival
+      const dayMap = {1:'Monday', 2:'Tuesday', 3:'Wednesday', 4:'Thursday', 5:'Friday', 6:'Saturday', 0:'Sunday'};
+      const target = dayMap[new Date().getDay()];
       if (!target) return;
-      // find the h2 heading matching the target day
       const h2s = document.querySelectorAll('.md h2');
       for (const h of h2s) {
         if (h.textContent.toLowerCase().startsWith(target.toLowerCase())) {
@@ -1028,33 +1026,64 @@
 
     // ── locations panel ──
     function buildLocationsPanel(page) {
+      const slug = page.slug;
       const mapSrc = page.map || '';
-      return '' +
-        '<div class="map-toolbar" id="mapToolbar">' +
-        '<button data-mode="tent">⛺ Tent</button>' +
-        '<button data-mode="meet">📍 Meet</button>' +
-        '<button data-mode="me">🙂 Me</button>' +
-        '<button id="clearMarkers">✕ Clear</button>' +
-        '</div>' +
-        '<div class="map-container" id="mapContainer">' +
-        '<img src="' + mapSrc + '" id="mapImg" alt="Festival map">' +
-        '<div id="markersLayer"></div>' +
-        '</div>' +
-        '<div class="map-share-wrap"><button id="shareMap">📤 Share my map</button></div>' +
-        '<p class="map-help">Select a type above, then tap the map to place or move it. Tap a marker to select it for moving. Long-press a marker to label or remove. Long-press the Me button to choose your emoji.</p>' +
-        '<div class="supermarket-section">' +
-          '<h3>🚗 Getting There</h3>' +
-          '<a href="appletree-2026/assets/anreise.png" target="_blank">' +
-            '<img class="supermarket-map" src="appletree-2026/assets/anreise.png" alt="Getting there directions">' +
-          '</a>' +
-          '<p class="supermarket-note">Tap map to enlarge — official travel directions from appletreegarden.de</p>' +
-          '<h3>🛒 Nearest Supermarkets</h3>' +
-          '<a href="https://maps.google.com/?q=supermarket+Diepholz" target="_blank">' +
-            '<img class="supermarket-map" src="appletree-2026/assets/supermarket-map.png" alt="Supermarkets near Diepholz">' +
-          '</a>' +
-          '<p class="supermarket-note">🎪 Alter Groweg &nbsp;|&nbsp; 🛒 famila (Groweg 50, ~300m walk), Netto, ALDI</p>' +
-          '<p class="supermarket-note">Tap map to open in Google Maps for navigation</p>' +
-        '</div>';
+      let html = '';
+
+      // Festival grounds map (only if map image exists)
+      if (mapSrc) {
+        html += '' +
+          '<div class="map-toolbar" id="mapToolbar">' +
+            '<button data-mode="tent">⛺ Tent</button>' +
+            '<button data-mode="meet">📍 Meet</button>' +
+            '<button data-mode="me">🙂 Me</button>' +
+            '<button id="clearMarkers">✕ Clear</button>' +
+          '</div>' +
+          '<div class="map-container" id="mapContainer">' +
+            '<img src="' + mapSrc + '" id="mapImg" alt="Festival map">' +
+            '<div id="markersLayer"></div>' +
+          '</div>' +
+          '<div class="map-share-wrap"><button id="shareMap">📤 Share my map</button></div>' +
+          '<p class="map-help">Select a type above, then tap the map to place or move it. Tap a marker to select it for moving. Long-press a marker to label or remove. Long-press the Me button to choose your emoji.</p>';
+      }
+
+      // Festival-specific location sections
+      if (slug === 'appletree-2026') {
+        html += '' +
+          '<div class="supermarket-section">' +
+            '<h3>🚗 Getting There</h3>' +
+            '<a href="appletree-2026/assets/anreise.png" target="_blank">' +
+              '<img class="supermarket-map" src="appletree-2026/assets/anreise.png" alt="Getting there directions">' +
+            '</a>' +
+            '<p class="supermarket-note">Tap map to enlarge — official travel directions from appletreegarden.de</p>' +
+            '<h3>🛒 Nearest Supermarkets</h3>' +
+            '<a href="https://maps.google.com/?q=supermarket+Diepholz" target="_blank">' +
+              '<img class="supermarket-map" src="appletree-2026/assets/supermarket-map.png" alt="Supermarkets near Diepholz">' +
+            '</a>' +
+            '<p class="supermarket-note">🎪 Alter Groweg &nbsp;|&nbsp; 🛒 famila (Groweg 50, ~300m walk), Netto, ALDI</p>' +
+            '<p class="supermarket-note">Tap map to open in Google Maps for navigation</p>' +
+          '</div>';
+      } else if (slug === 'hoflaerm-2026') {
+        html += '' +
+          '<div class="supermarket-section">' +
+            '<h3>📍 Location</h3>' +
+            '<p class="supermarket-note">Obersalterberger Hof 1, 57577 Marienthal — single stage, no running between acts</p>' +
+            '<a href="https://maps.google.com/?q=Obersalterberger+Hof+1+57577+Marienthal" target="_blank">' +
+              '<p class="supermarket-note" style="color:var(--link);font-weight:600">🗺 Open in Google Maps →</p>' +
+            '</a>' +
+            '<h3>🚂 Getting There</h3>' +
+            '<p class="supermarket-note"><strong>Train:</strong> Bahnhof Kloster Marienthal — directly in town, a few minutes walk to the festival</p>' +
+            '<p class="supermarket-note"><strong>Car:</strong> Via A3 or A45 into the Westerwald. Parking directly on site.</p>' +
+            '<h3>🏕 Camping</h3>' +
+            '<p class="supermarket-note">Campground directly at the festival (0–500m to stage). Camp next to your car. Showers and proper toilets available. Breakfast stand in the mornings.</p>' +
+            '<h3>🛒 Nearest Supermarket</h3>' +
+            '<a href="https://maps.google.com/?q=REWE+Marktzentrum+7+57577+Marienthal" target="_blank">' +
+              '<p class="supermarket-note" style="color:var(--link);font-weight:600">REWE — Marktzentrum 7, ~3 km →</p>' +
+            '</a>' +
+          '</div>';
+      }
+
+      return html;
     }
 
     function initMap(slug, mapSrc) {
