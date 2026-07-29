@@ -582,6 +582,7 @@
     // Festival data in this app is expected to be current-era schedule content.
     const MIN_FESTIVAL_YEAR = 2000;
     const MAX_FESTIVAL_YEAR = 2099;
+    const ACTIVITY_UPDATE_INTERVAL_MS = 60000;
 
     // ── toast ──
     function toast(msg, ms = 2000) {
@@ -722,8 +723,12 @@
       return match ? Number(match[1]) : null;
     }
 
+    function isValidFestivalYear(year) {
+      return Number.isInteger(year) && year >= MIN_FESTIVAL_YEAR && year <= MAX_FESTIVAL_YEAR;
+    }
+
     function parseScheduleDay(text, year) {
-      if (!Number.isInteger(year) || year < MIN_FESTIVAL_YEAR || year > MAX_FESTIVAL_YEAR) return null;
+      if (!isValidFestivalYear(year)) return null;
       const monthMap = {
         january: 0, jan: 0,
         february: 1, feb: 1,
@@ -804,6 +809,7 @@
           const range = parseTimeRange(timeCell && timeCell.textContent);
           if (!range) return;
 
+          // A lower start time than the previous row means the schedule rolled past midnight.
           if (previousStartMinutes !== null && range.startMinutes < previousStartMinutes) {
             currentDayOffset += 1;
           }
@@ -825,7 +831,7 @@
     function startArtistActivityUpdates() {
       clearInterval(artistActivityTimer);
       updateArtistActivityIndicators();
-      artistActivityTimer = setInterval(updateArtistActivityIndicators, 60000);
+      artistActivityTimer = setInterval(updateArtistActivityIndicators, ACTIVITY_UPDATE_INTERVAL_MS);
     }
 
     let activeTab = null;
